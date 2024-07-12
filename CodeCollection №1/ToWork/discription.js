@@ -12,7 +12,7 @@ const BOT_TOKEN = '7113415649:AAF20ZaZV3V1seUv-Lud7tigNukC-eTD4Tk'; //testbot co
 const bot = new telegramApi(BOT_TOKEN, { polling: true });// Создание экземпляра Telegram Bot
 let chatId = '1440654064'
 let chatIdTsiukhai = '1440654064'; // Идентификатор чата для Tsiukhai
-let chatIdRatkevich = '1440654064'; // Идентификатор чата для Ratkevich 91211691
+let chatIdRatkevich = '91211691'; // Идентификатор чата для Ratkevich 91211691
 var imap = new Imap({ // Настройки для подключения к IMAP серверу
     user: 'sashaklimovking@outlook.com', // Логин для IMAP
     password: '94699203o', // Пароль для IMAP
@@ -22,6 +22,9 @@ var imap = new Imap({ // Настройки для подключения к IMA
 });
 
 let lastMessageId
+//===========================================================---НЕ ЗАБЫТЬ
+//let cancelButtonPressed;
+
 
 function openInbox(cb) {// Функция для открытия почтового ящика
     imap.openBox('INBOX', false, cb); // Открытие ящика 'fardesk'
@@ -78,7 +81,12 @@ bot.on('callback_query', async msg => {// Обработчик callback-запр
     }
     //Твой кусок закрыт
 
-    const responseON1 = (response) => { responseWithText(response, msg, {responseON1,result,TextofButtons}) }; // Функция для обработки закрытия заявки
+
+
+    let textForOtmena = '\n\n (Чтобы отменить, нажмите кнопку ОТМЕНА и напишите любой текст, потом венитесь к заявки и нажмите <НАЗАД'
+    cancelButtonPressed = false
+    
+    const responseON1 = (response) => { responseWithText(response, msg, {responseON1,result,TextofButtons,cancelButtonPressed}) }; // Функция для обработки закрытия заявки
     const responseON2 = (response) => { responseWithoutText(response, msg, {responseON2,TextofButtons}) }; // Функция для обработки закрытия заявки
     // Кнопки после закрыть заявки
     if (data === 'Kartreader') {
@@ -104,144 +112,166 @@ bot.on('callback_query', async msg => {// Обработчик callback-запр
     // Кнопки после картридер
     if (data === 'Podemenniy') {
         bot.editMessageReplyMarkup(kartreaderBACK['reply_markup'], { chat_id: chatId, message_id: messageId });
-        const message = bot.sendMessage(chatId, 'Введите серийный подменного?',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
-        result = message.then((res)=>{return res;})
-        TextofButtons = 'Замена оборудования, серийник установленного: '
-        bot.on('message', responseON1)
+        const message = bot.sendMessage(chatId, 'Введите серийный подменного?'+textForOtmena,{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{console.log(res);return res;})
+        console.log(message, '============')
+        console.log(result.message_Id)
+        bot.on('callback_query', query =>{
+            if (query.data === 'Otmena') {
+                console.log('++++++++++++++++',query.message,'++++++++++++++')
+                bot.deleteMessage(chatId, query.message.message_id)    
+                // bot.removeListener('message', listRespons);       
+                return
+            }
+            else{ TextofButtons = 'Картридер. Замена оборудования, серийник установленного: '
+                bot.on('message', responseON1)}
+        })
+        
+        // TextofButtons = 'Картридер. Замена оборудования, серийник установленного: '
+        // bot.on('message', responseON1)
     }
-
-
     if (data ==='Izvlechenie') {
         bot.editMessageReplyMarkup(kartreaderBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
-        const message = bot.sendMessage(chatId, 'Введите что извлекли?',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        const message = bot.sendMessage(chatId, 'Введите что извлекли?'+textForOtmena,{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
         result = message.then((res)=>{return res;})
         TextofButtons = 'Картридер. Извлечение постороннего предмета: '
         bot.on('message', responseON1)
     }
     if (data ==='Remontreader') {
         bot.editMessageReplyMarkup(kartreaderBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
-        const message = bot.sendMessage(chatId, 'замена всех расходников + тестирование. Что сделано',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        const message = bot.sendMessage(chatId, 'Что сделано?'+textForOtmena,{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
         result = message.then((res)=>{return res;})
         TextofButtons = 'Картридер. Замена всех расходников + тестирование + '
         bot.on('message', responseON1)
     }
     if (data ==='Drugoe') {
         bot.editMessageReplyMarkup(kartreaderBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
-        const message = bot.sendMessage(chatId, 'Введите что ДРУГОЕ?',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        const message = bot.sendMessage(chatId, 'Введите ваш текст:'+textForOtmena,{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
         result = message.then((res)=>{return res;})
-        TextofButtons = 'Другое:'
+        TextofButtons = 'Картридер. Другое:'
         bot.on('message', responseON1)
     }
 
     // Кнопки после Video
     if (data ==='VideoNabludenie') {
-        // bot.editMessageReplyMarkup(videoBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
-        // const message = bot.sendMessage(chatId, 'Введите что ДРУГОЕ?',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
-        // result = message.then((res)=>{return res;})
         TextofButtons = 'Выполнена настройка видео наблюдения'
         responseON2()
     }
     if (data ==='OchistkaDiska') {
-        bot.editMessageReplyMarkup(videoBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        TextofButtons = 'Видео. Очистка диска'
+        responseON2()
     }
     if (data ==='Lisenzia') {
-        bot.editMessageReplyMarkup(videoBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        TextofButtons = 'Востановление лицензии'
+        responseON2()
     }
     if (data ==='ZamenaObered') {
         bot.editMessageReplyMarkup(videoBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        const message = bot.sendMessage(chatId, 'Что менялось(Серийник если есть)',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{return res;})
+        TextofButtons = 'Видео. Менялось(Серийник если есть):'
+        bot.on('message', responseON1)
     }
     if (data ==='VideoOther') {
         bot.editMessageReplyMarkup(videoBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        const message = bot.sendMessage(chatId, 'Введите ваш текст:',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{return res;})
+        TextofButtons = 'Видео. Другое:'
+        bot.on('message', responseON1)
     }
     // Кнопки После ТО   
 
     // Кнопки После Связь
     if (data ==='PerezagruzkaATM') {
-        bot.editMessageReplyMarkup(sviazBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        TextofButtons = 'Связь. Перезагрузка ATM'
+        responseON2()
     }
     if (data ==='PerezagruzkaSviaz') {
-        bot.editMessageReplyMarkup(sviazBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        TextofButtons = 'Перезагрузка связи'
+        responseON2()
     }
     if (data ==='ZamenaSVIAZ') {
         bot.editMessageReplyMarkup(sviazBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        const message = bot.sendMessage(chatId, 'Введите замененное оборудование',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{return res;})
+        TextofButtons = 'Связь. Замена обурудования:'
+        bot.on('message', responseON1)
+        
+        responseON2()
     }
     if (data ==='SviazOther') {
         bot.editMessageReplyMarkup(sviazBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        const message = bot.sendMessage(chatId, 'Введите ваш текст:',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{return res;})
+        TextofButtons = 'Связь. Другое:'
+        bot.on('message', responseON1)
     }
+
     // => Кнопки После Принтер
     if (data ==='ZamenaBumaga') {
-        bot.editMessageReplyMarkup(printerBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
+        TextofButtons = 'Замена бумаги'
+        responseON2()
+
     }
     if (data ==='Remont') {
         bot.editMessageReplyMarkup(printerBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
-        
-        bot.on('message', inputHandler);
+        const message = bot.sendMessage(chatId, 'Что сделали?',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{return res;})
+        TextofButtons = 'Принтер. Ремонт оборудования:'
+        bot.on('message', responseON1)
     }
     if (data ==='ZamenaPrinter') {
         bot.editMessageReplyMarkup(printerBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
-        bot.sendMessage(chatId, 'Отправьте сообщение с закрытием заявки'); // Отправка сообщения
-        bot.on('message', listResponsClose); // Установка обработчика сообщений для закрытия заявки
+        const message = bot.sendMessage(chatId, 'Серийник?',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{return res;})
+        TextofButtons = 'Принтер. Замена обурудования. Серийник:'
+        bot.on('message', responseON1)
     }
     if (data ==='PrinterOther') {
         bot.editMessageReplyMarkup(printerBACK['reply_markup'], { chat_id: chatId, message_id: messageId }); // Редактирование кнопок
-        // console.log('Прошел запрос 1')
-        // bot.on('message',msg=>{saDA(msg, messageId);
-        //     console.log('Прошел запрос 1')
-        // })
+        const message = bot.sendMessage(chatId, 'Введите ваш текст:',{ reply_markup: cancel.reply_markup, parse_mode: 'Markdown' });
+        result = message.then((res)=>{return res;})
+        TextofButtons = 'Принтер. Другое:'
+        bot.on('message', responseON1)
     
     }
-    // const mytest = (response) => { notmytest(response, msg, mytest) }; // Функция для обработки закрытия заявки
-
-
-    // if (data === 'svernut') {
-    //     // bot.editMessageText(`Заявка: [${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title'))}](${url}) закрыта`, { chat_id: chatId, message_id: messageId })
-        
-    // }
-    // if (data === 'Otmena') {
-    //     bot.deleteMessage(chatId, result._rejectionHandler0.message_id )
-    //     .then(() => resolve())
-    //     bot.removeListener('callback_query', listRespons);
-    // }
     
+    if (data === 'Otmena' ) {
+        // res =result._rejectionHandler0.message_id
+        cancelButtonPressed = true
+        // bot.deleteMessage(chatId, messageId)
+        // bot.removeListener('callback_query', responseON1);    
+        // return
+    }
+
 });
-// function saDA(msg,messageId){
-//     // bot.on('message', mytest);
-//     console.log('Прошел запрос 2')
-//         console.log(msg.text)
-//         bot.sendMessage(chatId, msg.text+ ' Кнопки для тестов', { reply_markup: buttons.reply_markup, parse_mode: 'Markdown' })
-//         bot.editMessageText('Ticket:R-056209 Заявка зафиксирована:   '+msg.text, { chat_id: chatId, message_id: messageId, })
-//         bot.removeListener('message', listRespons);
-//         return
-//     }
-
-// async endMessage(chatIdTsiukhai, `Заявка: [${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title'))}](${url}). От кого: [${chatId}](tg://user?id=${response.chat.id}). Текст: ${response.text}`, { parse_mode: 'Markdown' });
-//     bot.edfunction ustanovka(response, msgCloseReq, listRespons) {}
-// async function Podemen(mssg){
-//     bot.sendMessage(chatIdTsiukhai, `Заявка: [${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title'))}](${url}). От кого: [${chatId}](tg://user?id=${response.chat.id}). Текст: ${response.text}`, { parse_mode: 'Markdown' });
-// }
-// async function notmytest(response, msgCloseReq, listRespons) {
-//     let reg = /[\r\n\t\f]+/g; // Регулярное выражение для удаления спецсимволов
-//     let textEditStrike = '<strike>' + msgCloseReq.message.text + '</strike>'; // Зачёркнутый текст
-//     let url = `https://fardesk.farnell.by/pages/UI.php?operation=details&class=UserRequest&id=${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title')).replaceAll(reg, '')}&c[menu]=UserRequest%3AOpenRequests`; // URL для заявки
-//     bot.sitMessageText(textEditStrike, { chat_id: chatId/*msgCloseReq.message.chat.id*/, message_id: msgCloseReq.message.message_id, reply_markup: buttonsRef['reply_markup'], parse_mode: 'HTML' });
-//     bot.removeListener('message', listRespons);// Удаление обработчика сообщений
-// }
-
-
-async function responseWithText(response, msgCloseReq, {listRespons,result,TextofButtons}) {
+async function responseWithText(response, msgCloseReq, {listRespons,result,TextofButtons,cancelButtonPressed}) {
+    
     res =result._rejectionHandler0.message_id
+    console.log(cancelButtonPressed)
+    if (cancelButtonPressed === true) {
+
+        cancelButtonPressed === false
+    //     bot.deleteMessage(chatId, res)
+       bot.removeListener('message', listRespons);       
+        return
+    }
     console.log(res)
     console.log(TextofButtons)
-    bot.deleteMessage(chatId, res)
+    
+    try {
+        bot.deleteMessage(chatId, res)
+    } catch (error) {} 
     let reg = /[\r\n\t\f]+/g; // Регулярное выражение для удаления спецсимволов
     let url = `https://fardesk.farnell.by/pages/UI.php?operation=details&class=UserRequest&id=${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title')).replaceAll(reg, '')}&c[menu]=UserRequest%3AOpenRequests`; // URL для заявки
     let textEditStrike = /*'<strike>' +*/ `Заявка: ${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title'))}.` /*+ '</strike>'*/; // Зачёркнутый текст
-    bot.sendMessage(chatIdTsiukhai, `\n📄${textEditStrike}\n🔗${url}\n🔁${TextofButtons}${response.text}\n👤[${chatId}](tg://user?id=${response.chat.id})`, { parse_mode: 'Markdown' });
-    //  bot.sendMessage(chatIdRatkevich, `Заявка: [${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title'))}](${url}). От кого: [${chatId}](tg://user?id=${response.chat.id}). Текст: ${response.text}`, { parse_mode: 'Markdown' });
-    bot.editMessageText(`\n📄${textEditStrike}\n🔗${url}\n🔁${TextofButtons}${response.text}\n👤[${chatId}](tg://user?id=${response.chat.id})`, { chat_id: chatId/*msgCloseReq.message.chat.id*/, message_id: msgCloseReq.message.message_id, reply_markup: buttonsRef['reply_markup'], parse_mode: 'HTML',parse_mode: 'Markdown' });
+    bot.sendMessage(chatIdTsiukhai, `\n📄${textEditStrike}\n🔗[Ссылка](${url})\n🔁${TextofButtons}${response.text}\n👤[${chatId}](tg://user?id=${response.chat.id})`, { parse_mode: 'Markdown' });
+    
+    //bot.sendMessage(chatIdRatkevich, `\n📄${textEditStrike}\n🔗[Ссылка](${url})\n🔁${TextofButtons}${response.text}\n👤[${chatId}](tg://user?id=${response.chat.id})`, { parse_mode: 'Markdown' });
+    bot.editMessageText(`\n📄${textEditStrike}\n🔗[Ссылка](${url})\n🔁${TextofButtons}${response.text}\n👤[${chatId}](tg://user?id=${response.chat.id})`, { chat_id: chatId/*msgCloseReq.message.chat.id*/, message_id: msgCloseReq.message.message_id, reply_markup: buttonsRef['reply_markup'], parse_mode: 'HTML',parse_mode: 'Markdown' });
 
     bot.removeListener('message', listRespons);     
-}
+    }
 
 async function responseWithoutText(response, msgCloseReq, {listRespons,TextofButtons}) {
     // res =result._rejectionHandler0.message_id
@@ -251,12 +281,22 @@ async function responseWithoutText(response, msgCloseReq, {listRespons,TextofBut
     let reg = /[\r\n\t\f]+/g; // Регулярное выражение для удаления спецсимволов
     let url = `https://fardesk.farnell.by/pages/UI.php?operation=details&class=UserRequest&id=${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title')).replaceAll(reg, '')}&c[menu]=UserRequest%3AOpenRequests`; // URL для заявки
     let textEditStrike = /*'<strike>' +*/ `Заявка: ${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title'))}.` /*+ '</strike>'*/; // Зачёркнутый текст
-    bot.sendMessage(chatIdTsiukhai, `\n📄${textEditStrike}\n🔗${url}\n🔁${TextofButtons}\n👤[${chatId}](tg://user?id=${chatId})`, { parse_mode: 'Markdown' });
-    //  bot.sendMessage(chatIdRatkevich, `Заявка: [${msgCloseReq.message.text.substring(0, msgCloseReq.message.text.indexOf('Title'))}](${url}). От кого: [${chatId}](tg://user?id=${response.chat.id}). Текст: ${response.text}`, { parse_mode: 'Markdown' });
-    bot.editMessageText(`\n📄${textEditStrike}\n🔗${url}\n🔁${TextofButtons}\n👤[${chatId}](tg://user?id=${chatId})`, { chat_id: chatId/*msgCloseReq.message.chat.id*/, message_id: msgCloseReq.message.message_id, reply_markup: buttonsRef['reply_markup'], parse_mode: 'HTML',parse_mode: 'Markdown' });
+    bot.sendMessage(chatIdTsiukhai, `\n📄${textEditStrike}\n🔗[Ссылка](${url})\n🔁${TextofButtons}\n👤[${chatId}](tg://user?id=${chatId})`, { parse_mode: 'Markdown' });
+    //bot.sendMessage(chatIdRatkevich, `\n📄${textEditStrike}\n🔗[Ссылка](${url})\n🔁${TextofButtons}\n👤[${chatId}](tg://user?id=${chatId})`, { parse_mode: 'Markdown' });
+    bot.editMessageText(`\n📄${textEditStrike}\n🔗[Ссылка](${url})\n🔁${TextofButtons}\n👤[${chatId}](tg://user?id=${chatId})`, { chat_id: chatId/*msgCloseReq.message.chat.id*/, message_id: msgCloseReq.message.message_id, reply_markup: buttonsRef['reply_markup'], parse_mode: 'HTML',parse_mode: 'Markdown' });
 
     bot.removeListener('message', listRespons);     
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

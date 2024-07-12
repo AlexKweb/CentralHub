@@ -168,13 +168,13 @@ module.exports = {
 
 
 
-    svernut: {
-        reply_markup: JSON.stringify({
-            inline_keyboard: [
-                [{text: 'Свернуть заявку', callback_data: 'svernut'}],
-            ]
-        })
-    },
+    // svernut: {
+    //     reply_markup: JSON.stringify({
+    //         inline_keyboard: [
+    //             [{text: 'Свернуть заявку', callback_data: 'svernut'}],
+    //         ]
+    //     })
+    // },
     // => Кнопки После Картридер
     kartreader: {
         reply_markup: JSON.stringify({

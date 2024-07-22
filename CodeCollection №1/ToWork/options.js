@@ -83,12 +83,7 @@ module.exports = {
     to: {
         reply_markup: JSON.stringify({
             inline_keyboard: [
-                [{text: 'Много', callback_data: '1'}],
-                [{text: 'Много', callback_data: '1'}],
-                [{text: 'Много', callback_data: '1'}],
-                [{text: 'Много', callback_data: '1'},{text: '< Назад', callback_data: '1'}],
-                [{text: 'Много', callback_data: '1'},{text: '< Назад', callback_data: '1'}],
-                [{text: 'Много', callback_data: '1'},{text: '< Назад', callback_data: '1'}]
+                [{text: '< Назад', callback_data: '1'}],
             ]
         })
     },

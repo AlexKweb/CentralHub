@@ -9,9 +9,8 @@ int main() {
     vector<vector<int>> m(n, vector<int>(n));
     cout << endl << "Enter " << n*n << " elements: " << endl;
     for (int i=0; i<n; i++)
-        for (int j=0; j<n; j++)
-            cin >> m[i][j];
-
+        for (int j=0; j<n; j++) 
+        cin >> m[i][j];
     for (int i=0; i<n; i++)
         for (int j=0; j<n; j++) {
             int elem = m[i][j];

@@ -14,6 +14,9 @@ int main() {
     cout << "What find: ";
     cin >> x;
     
+    
+    //sort(arr.begin(), arr.end());  
+
     int left = 0;
     int right = n - 1;
     while (left <= right) {

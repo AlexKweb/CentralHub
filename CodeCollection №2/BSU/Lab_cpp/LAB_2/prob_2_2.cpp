@@ -1,45 +1,75 @@
 #include <iostream>
 using namespace std;
 
-class Solution {
-public:
-    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+void insertionSort(int arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
 
-        vector<vector<string>> strsRez;
-
-        // for(int i = 0; i < strs.size(); i++){
-        //     sort(strs[i].begin(), strs[i].end());
-        // }
-
-        int k = 0;
-
-        for (int i = 0; i < strs.size(); i++) {
-            strsRez.push_back(vector<string>{strs[i]});
-            for (int j = i + 1; j < strs.size(); j++) {
-                string s1 = strs[i];
-                string s2 = strs[j];
-                sort(s1.begin(), s1.end());
-                sort(s2.begin(), s2.end());
-
-                if (s1 == s2) {
-                    strsRez[i].push_back(strs[j]);
-                    strs.erase(strs.begin() + j);
-                }
+void selectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
             }
         }
-        sort(strsRez.begin(), strsRez.end());
-
-        return strsRez;
+        swap(arr[i], arr[minIndex]);
     }
-};
+}
+
+void bubbleSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                swap(arr[j], arr[j + 1]);
+            }
+        }
+    }
+}
 
 int main() {
-    vector<string> strs;
-    cout << "Enter elem:\n";
-    for (int i = 0; i < 3; i++) {
-        getline(cin, strs[i]);
+    int n;
+    cout << "Enter array size: ";
+    cin >> n;
+
+    int arr[1000];
+    cout << "Enter elements: ";
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
-    Solution mysol;
-    mysol.groupAnagrams(strs);
+
+    int type;
+    cout << "Choose sort type (1 - insertion, 2 - selection, 3 - bubble): ";
+    cin >> type;
+
+    switch (type) {
+        case 1:
+            insertionSort(arr, n);
+            break;
+        case 2:
+            selectionSort(arr, n);
+            break;
+        case 3:
+            bubbleSort(arr, n);
+            break;
+        default:
+            cout << "Invalid type!" << endl;
+            return 0;
+    }
+
+    cout << "Sorted array: ";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
     return 0;
 }

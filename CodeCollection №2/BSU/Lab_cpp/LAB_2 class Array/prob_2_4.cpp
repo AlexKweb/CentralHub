@@ -1,4 +1,5 @@
 #include "Array.h"
+#include <fstream>
 
 struct Position {
     int r;
@@ -19,26 +20,50 @@ bool isRectangle(int minR, int maxR, int minC, int maxC, const Position& p1, con
 }
 
 int main() {
-    std::cout << "Введите матрицу 5x5:\n";
-    int matrix[5][5];
-    for (int i = 0; i < 5; ++i) {
-        for (int j = 0; j < 5; ++j) {
-            std::cin >> matrix[i][j];
-        }
+    std::ifstream fin("input.txt");
+    if (!fin) {
+        std::cout << "Не удалось открыть input.txt";
+        return 0;
     }
 
-    std::cout << "Введите четыре числа-вершины прямоугольника: ";
+    std::string line;
+    bool found = false;
+    while (std::getline(fin, line)) {
+        if (line == "#4") {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        std::cout << "Метка задания не найдена";
+        return 0;
+    }
+
+    Array<int> matrix(25);
+    for (int i = 0; i < 25; ++i) {
+        int value;
+        if (!(fin >> value)) {
+            std::cout << "Недостаточно данных матрицы";
+            return 0;
+        }
+        matrix.add(value);
+    }
+
     int a, b, c, d;
-    std::cin >> a >> b >> c >> d;
+    if (!(fin >> a >> b >> c >> d)) {
+        std::cout << "Нет чисел вершин";
+        return 0;
+    }
 
     Array<Position> pa(25), pb(25), pc(25), pd(25);
 
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
-            if (matrix[i][j] == a) pa.add({i, j});
-            if (matrix[i][j] == b) pb.add({i, j});
-            if (matrix[i][j] == c) pc.add({i, j});
-            if (matrix[i][j] == d) pd.add({i, j});
+            int val = matrix[i * 5 + j];
+            if (val == a) pa.add({i, j});
+            if (val == b) pb.add({i, j});
+            if (val == c) pc.add({i, j});
+            if (val == d) pd.add({i, j});
         }
     }
 

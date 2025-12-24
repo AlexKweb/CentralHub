@@ -1,13 +1,41 @@
 #include "Array.h"
+#include <fstream>
 
 int main() {
-    std::cout << "Введите размер квадратной матрицы: ";
+    std::ifstream fin("input.txt");
+    if (!fin) {
+        std::cout << "Не удалось открыть input.txt";
+        return 0;
+    }
+
+    std::string line;
+    bool found = false;
+    while (std::getline(fin, line)) {
+        if (line == "#5") {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        std::cout << "Метка задания не найдена";
+        return 0;
+    }
+
     size_t n;
-    std::cin >> n;
+    if (!(fin >> n)) {
+        std::cout << "Нет размера матрицы";
+        return 0;
+    }
 
     Array<int> matrix(n * n);
-    std::cout << "Введите " << n * n << " элементов: ";
-    std::cin >> matrix;
+    for (size_t i = 0; i < n * n; ++i) {
+        int value;
+        if (!(fin >> value)) {
+            std::cout << "Недостаточно элементов матрицы";
+            return 0;
+        }
+        matrix.add(value);
+    }
 
     std::cout << "Элементы, минимальные в строке и максимальные в столбце:\n";
     for (size_t i = 0; i < n; ++i) {

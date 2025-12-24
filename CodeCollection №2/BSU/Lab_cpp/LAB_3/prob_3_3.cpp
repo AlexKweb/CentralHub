@@ -19,9 +19,13 @@ int main()
     double D_matrix[2][2] = { {a,b}, {c,d} };
     double D = kramer(D_matrix);
 
+
     if (D == 0)
     {
-        std::cout << "There are no solutions!" << '\n';
+        if (kramer({{e,b}, {f,d}}) == 0 && kramer({{a,e}, {c,f}}) == 0)
+            std::cout << "There are infinitely many solutions!" << '\n';
+        else
+            std::cout << "There are no solutions!" << '\n';
     }
     else
     {

@@ -1,23 +1,47 @@
 #include "Array.h"
-#include <string>
 #include <algorithm>
+#include <fstream>
 
 int main() {
-    std::cout << "Введите натуральное число: ";
-    std::string number;
-    std::cin >> number;
+    std::ifstream fin("input.txt");
+    if (!fin) {
+        std::cout << "Не удалось открыть input.txt";
+        return 0;
+    }
+
+    std::string line;
+    bool found = false;
+    while (std::getline(fin, line)) {
+        if (line == "#1") {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        std::cout << "Метка задания не найдена";
+        return 0;
+    }
+
+    int temp;
+    if (!(fin >> temp)) {
+        std::cout << "Нет данных";
+        return 0;
+    }
 
     Array<int> counts(10);
     for (size_t i = 0; i < 10; ++i) {
         counts.add(0);
     }
 
-    for (char ch : number) {
-        if (ch < '0' || ch > '9') {
-            std::cout << "Некорректный ввод";
-            return 0;
+    if (temp == 0) {
+        counts[0] = counts[0] + 1;
+    } else {
+        int value = temp;
+        while (value > 0) {
+            int digit = value % 10;
+            counts[digit] = counts[digit] + 1;
+            value /= 10;
         }
-        counts[ch - '0'] = counts[ch - '0'] + 1;
     }
 
     int oddCount = 0;

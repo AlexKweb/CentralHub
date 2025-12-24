@@ -1,19 +1,49 @@
 #include "Array.h"
+#include <fstream>
 
 int main() {
-    std::cout << "Введите размер отсортированного массива: ";
+    std::ifstream fin("input.txt");
+    if (!fin) {
+        std::cout << "Не удалось открыть input.txt";
+        return 0;
+    }
+
+    std::string line;
+    bool found = false;
+    while (std::getline(fin, line)) {
+        if (line == "#3") {
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        std::cout << "Метка задания не найдена";
+        return 0;
+    }
+
     size_t n;
-    std::cin >> n;
+    if (!(fin >> n)) {
+        std::cout << "Нет размера массива";
+        return 0;
+    }
     Array<int> arr(n);
 
-    std::cout << "Введите " << n << " элементов: ";
-    std::cin >> arr;
+    for (size_t i = 0; i < n; ++i) {
+        int value;
+        if (!(fin >> value)) {
+            std::cout << "Недостаточно элементов массива";
+            return 0;
+        }
+        arr.add(value);
+    }
 
     arr.insertionSort();
 
-    std::cout << "Искомое значение: ";
     int target;
-    std::cin >> target;
+    if (!(fin >> target)) {
+        std::cout << "Нет искомого значения";
+        return 0;
+    }
 
     long pos = arr.binarySearch(target);
     if (pos >= 0) {

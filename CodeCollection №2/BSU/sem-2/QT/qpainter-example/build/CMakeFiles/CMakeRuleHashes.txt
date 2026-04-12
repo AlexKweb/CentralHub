@@ -1,0 +1,3 @@
+# Hashes of file build rules.
+4ae6c9a5f45894f3b9ecad916c83bf86 CMakeFiles/qpainter_example_autogen
+c2d0e5fa83e8d68899acab89e85ed75a qpainter_example_autogen/timestamp

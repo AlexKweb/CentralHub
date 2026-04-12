@@ -1,0 +1,5 @@
+/Users/alex/Downloads/qpainter-example/build/CMakeFiles/qpainter_example.dir
+/Users/alex/Downloads/qpainter-example/build/CMakeFiles/edit_cache.dir
+/Users/alex/Downloads/qpainter-example/build/CMakeFiles/rebuild_cache.dir
+/Users/alex/Downloads/qpainter-example/build/CMakeFiles/qpainter_example_autogen_timestamp_deps.dir
+/Users/alex/Downloads/qpainter-example/build/CMakeFiles/qpainter_example_autogen.dir

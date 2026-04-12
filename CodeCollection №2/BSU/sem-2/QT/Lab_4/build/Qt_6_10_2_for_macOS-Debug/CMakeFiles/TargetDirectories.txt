@@ -1,0 +1,7 @@
+/Users/alex/Documents/Qt projects/Lab_4/build/Qt_6_10_2_for_macOS-Debug/CMakeFiles/Lab_4.dir
+/Users/alex/Documents/Qt projects/Lab_4/build/Qt_6_10_2_for_macOS-Debug/CMakeFiles/edit_cache.dir
+/Users/alex/Documents/Qt projects/Lab_4/build/Qt_6_10_2_for_macOS-Debug/CMakeFiles/rebuild_cache.dir
+/Users/alex/Documents/Qt projects/Lab_4/build/Qt_6_10_2_for_macOS-Debug/CMakeFiles/list_install_components.dir
+/Users/alex/Documents/Qt projects/Lab_4/build/Qt_6_10_2_for_macOS-Debug/CMakeFiles/install.dir
+/Users/alex/Documents/Qt projects/Lab_4/build/Qt_6_10_2_for_macOS-Debug/CMakeFiles/install/local.dir
+/Users/alex/Documents/Qt projects/Lab_4/build/Qt_6_10_2_for_macOS-Debug/CMakeFiles/install/strip.dir

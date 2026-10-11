@@ -1,0 +1,12 @@
+# built binaries
+/jev
+/jev.exe
+/bin/
+
+# wasm build outputs (wasm_exec.js is copied from GOROOT at build time)
+web/*.wasm
+web/wasm_exec.js
+
+# test and coverage artifacts
+*.test
+coverage.out

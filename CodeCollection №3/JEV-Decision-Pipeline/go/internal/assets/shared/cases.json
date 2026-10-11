@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "gate": 0.85,
+  "cases": [
+    {
+      "id": "email", "title": "EMAIL TRIAGE", "tile": "email", "accent": "#FF5C5C",
+      "type": "choice", "question": "Choice · folder", "answer": "phishing", "confidence": 0.97,
+      "gateLabel": "quarantine", "jevMs": 3, "logCode": "mail → quarantine",
+      "path": ["s.email", "q.folder", "j.choice_head", "g.quarantine", "c.mail_moved"]
+    },
+    {
+      "id": "youtube", "title": "YOUTUBE COMMENT", "tile": "youtube", "accent": "#C6F23A",
+      "type": "noul", "question": "Noul · worth_reply", "answer": "yes", "confidence": 0.91,
+      "gateLabel": "draft reply", "jevMs": 2, "logCode": "reply → drafted",
+      "path": ["s.comment", "q.worth_reply", "j.noul_head", "g.draft_reply", "c.llm_writes"]
+    },
+    {
+      "id": "skool", "title": "SKOOL THREAD", "tile": "skool", "accent": "#B57BFF",
+      "type": "choice", "question": "Choice · next_worker", "answer": "write", "confidence": 0.93,
+      "gateLabel": "type_destination", "jevMs": 3, "logCode": "typed + submit",
+      "path": ["s.thread", "q.next_worker", "j.choice_head", "g.type_destination", "c.llm_writes"]
+    },
+    {
+      "id": "xfeed", "title": "X FEED POST", "tile": "x feed", "accent": "#FF4FA0",
+      "type": "score", "question": "Score · viral_fit", "answer": "high", "confidence": 0.92,
+      "gateLabel": "draft_short", "jevMs": 2, "logCode": "draft → review folder",
+      "path": ["s.post", "q.viral_fit", "j.score_head", "g.draft_short", "c.review_folder"]
+    },
+    {
+      "id": "meetings", "title": "MEETING NOTES", "tile": "meetings", "accent": "#2EE6D6",
+      "type": "choice", "question": "Choice · owner", "answer": "team", "confidence": 0.90,
+      "gateLabel": "assign_owner", "jevMs": 3, "logCode": "3 tasks → team",
+      "path": ["s.transcript", "q.owner", "j.choice_head", "g.assign_owner", "c.task_created"]
+    },
+    {
+      "id": "clips", "title": "CLIP CUT", "tile": "clips", "accent": "#FF8A3D",
+      "type": "score", "question": "Score · hook_strength", "answer": "strong", "confidence": 0.88,
+      "gateLabel": "draft_short", "jevMs": 2, "logCode": "cut → saved",
+      "path": ["s.clip", "q.hook", "j.score_head", "g.draft_short", "c.progress_saved"]
+    },
+    {
+      "id": "contracts", "title": "CONTRACT REVIEW", "tile": "contracts", "accent": "#5B7CFF",
+      "type": "score", "question": "Score · clause_risk", "answer": "high", "confidence": 0.79,
+      "gateLabel": "review", "jevMs": 4, "logCode": "→ human · review",
+      "path": ["s.contract", "q.clause_risk", "j.score_head", "g.review", "c.human_gate"]
+    },
+    {
+      "id": "leads", "title": "INBOUND LEAD", "tile": "leads", "accent": "#F7B731",
+      "type": "score", "question": "Score · lead_quality", "answer": "high", "confidence": 0.94,
+      "gateLabel": "book_call", "jevMs": 2, "logCode": "link → sent",
+      "path": ["s.lead", "q.lead_quality", "j.score_head", "g.book_call", "c.calendar"]
+    },
+    {
+      "id": "braindump", "title": "BRAIN DUMP", "tile": "brain-dump", "accent": "#E36BFF",
+      "type": "choice", "question": "Choice · next_worker", "answer": "research", "confidence": 0.86,
+      "gateLabel": "type_destination", "jevMs": 3, "logCode": "job → saved",
+      "path": ["s.note", "q.next_worker", "j.choice_head", "g.type_destination", "c.progress_saved"]
+    },
+    {
+      "id": "support", "title": "SUPPORT TICKET", "tile": "support", "accent": "#4CB8FF",
+      "type": "score", "question": "Score · urgency", "answer": "critical", "confidence": 0.95,
+      "gateLabel": "eng_oncall", "jevMs": 2, "logCode": "ping → on-call",
+      "path": ["s.ticket", "q.urgency", "j.score_head", "g.eng_oncall", "c.slack_ping"]
+    },
+    {
+      "id": "trading", "title": "MARKET SIGNAL", "tile": "trading", "accent": "#34E8A0",
+      "type": "noul", "question": "Noul · enter_trade", "answer": "yes", "confidence": 0.87,
+      "gateLabel": "paper_trade", "jevMs": 2, "logCode": "paper order → logged",
+      "path": ["s.tick", "q.enter_trade", "j.noul_head", "g.paper_trade", "c.order_logged"]
+    },
+    {
+      "id": "agents", "title": "BROWSER AGENT", "tile": "agents", "accent": "#8A7BFF",
+      "type": "choice", "question": "Choice · action", "answer": "click", "confidence": 0.96,
+      "gateLabel": "execute", "jevMs": 3, "logCode": "click + outcome check",
+      "path": ["s.dom", "q.action", "j.choice_head", "g.gate", "c.code_clicks"]
+    }
+  ]
+}

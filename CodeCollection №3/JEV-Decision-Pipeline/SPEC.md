@@ -233,7 +233,7 @@ JEV-Decision-Pipeline/
 | 09 | braindump | BRAIN DUMP | `#E36BFF` | brain dump | Choice · next_worker | choice head → research 0.86 | type_destination | progress saved | job → saved |
 | 10 | support | SUPPORT TICKET | `#4CB8FF` | ticket | Score · urgency | score head → critical 0.95 | eng_oncall | Slack ping | ping → on-call |
 | 11 | trading | MARKET SIGNAL | `#34E8A0` | market tick | Noul · enter_trade | noul head → yes 0.87 | paper_trade | order logged | paper order → logged |
-| 12 | agents | BROWSER AGENT | `#8A7BFF` | DOM state | Choice · action | choice head → click 0.96 | gate ≥ 0.85 | code clicks | click + outcome check |
+| 12 | agents | BROWSER AGENT | `#8A7BFF` | DOM state | Choice · action | choice head → click 0.96 | gate ≥ 0.85 (gateLabel `execute`) | code clicks | click + outcome check |
 
 Кейс 07 намеренно не проходит порог: показывает ветку `REVIEW → human`.
 

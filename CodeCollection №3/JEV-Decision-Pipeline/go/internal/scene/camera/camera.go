@@ -13,6 +13,8 @@ const (
 	blendSeconds = 0.9
 	swayYaw      = 1.5 * deg
 	swayPitch    = 0.8 * deg
+	// targetDrop puts the stage target below its card, so the active card sits above the scene centre.
+	targetDrop = 1.5
 )
 
 // preset is the camera for one stage index 0..4 (state, ask, jev, gate, code). Angles are in degrees, distance in world units.
@@ -75,12 +77,12 @@ func (r Rig) frame(t float64) frame {
 	return lerpFrame(prev, cur, k)
 }
 
-// stageFrame is the camera for the card that stage si of case ci is on. The target sits halfway between that card and the centre line.
+// stageFrame is the camera for the card that stage si of case ci is on. The target sits halfway between that card and the centre line, and targetDrop below it.
 func (r Rig) stageFrame(ci, si int) frame {
 	c := r.centers[r.cases[ci].Path[si]]
 	p := presets[si]
 	return frame{
-		target:   math.Vec3{0.5 * c[0], c[1], 0},
+		target:   math.Vec3{0.5 * c[0], c[1] - targetDrop, 0},
 		yaw:      p.yaw * deg,
 		pitch:    p.pitch * deg,
 		roll:     p.roll * deg,

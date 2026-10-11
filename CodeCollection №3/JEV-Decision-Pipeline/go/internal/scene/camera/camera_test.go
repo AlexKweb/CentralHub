@@ -80,8 +80,8 @@ func TestStagePresetsUseSpecAngles(t *testing.T) {
 		t.Fatalf("state preset = %+v", f)
 	}
 	c := r.centers[r.cases[0].Path[0]]
-	if f.target != (math.Vec3{0.5 * c[0], c[1], 0}) {
-		t.Fatalf("target %v, want (0.5·cx, cy, 0) of %v", f.target, c)
+	if f.target != (math.Vec3{0.5 * c[0], c[1] - 1.5, 0}) {
+		t.Fatalf("target %v, want (0.5·cx, cy−1.5, 0) of %v", f.target, c)
 	}
 }
 

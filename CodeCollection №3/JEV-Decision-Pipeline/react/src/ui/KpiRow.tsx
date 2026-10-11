@@ -97,7 +97,9 @@ export function KpiRow({ t, seed, cases }: { t: number; seed: number; cases: rea
       </Card>
       <Card zone="kpi-confidence" label="CONFIDENCE · LIVE">
         <div className="kpi-row">
-          <span className="kpi-value conf-value">{conf.text}</span>
+          <span className={conf.hundredths === null ? 'kpi-value conf-value' : 'kpi-value conf-value live'}>
+            {conf.text}
+          </span>
           {conf.badge && <span className={`badge ${conf.badge === 'PASS' ? 'pass' : 'review'}`}>{conf.badge}</span>}
         </div>
         <div className="conf-bar">

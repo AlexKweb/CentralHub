@@ -96,18 +96,30 @@ body {
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   font-size: 11px;
   letter-spacing: 0.04em;
   white-space: nowrap;
   color: var(--text-2);
 }
-.brand {
+.header > span {
+  position: absolute;
+  top: 0;
+  line-height: 32px;
+}
+.header .brand {
+  left: 0;
   font-size: 16px;
   font-weight: 800;
   color: var(--text);
+}
+.header .system {
+  left: 286px;
+}
+.header .flow {
+  left: 526px;
+}
+.header .author {
+  right: 0;
 }
 
 .kpi {
@@ -225,6 +237,9 @@ body {
 }
 
 .conf-value {
+  color: var(--text);
+}
+.conf-value.live {
   color: var(--pass);
 }
 .badge {
@@ -291,7 +306,7 @@ body {
   margin: 2px 0 0;
   height: 18px;
   font-size: 13px;
-  color: var(--text-2);
+  color: #c9d1dd;
   white-space: nowrap;
 }
 .stages {
@@ -347,6 +362,8 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 11px;
+}
+.panel-title {
   text-transform: uppercase;
 }
 .panel-title::before {
@@ -357,6 +374,321 @@ body {
   margin-right: 8px;
   vertical-align: middle;
   background: var(--accent);
+}
+
+.panel-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  font-size: 11px;
+}
+.panel-foot {
+  margin-top: auto;
+  color: var(--accent);
+}
+.dim {
+  color: var(--text-3);
+}
+.track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+}
+.track i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.segments {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+  height: 10px;
+}
+.segments i {
+  flex: 1;
+  background: #1a2130;
+}
+.segments i.on {
+  background: var(--accent);
+}
+.segments[data-lane='llm'] i.on {
+  background: #5a6475;
+}
+.segments[data-lane='code'] i.on {
+  background: #4fd1e8;
+}
+
+/* parallel questions */
+.pq-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.pq-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 14px;
+}
+.pq-label {
+  width: 62px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.pq-track {
+  position: relative;
+}
+.pq-track b {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+}
+.pq-answer {
+  width: 64px;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--text-3);
+}
+.pq-answer.bright {
+  color: var(--text);
+}
+
+/* confidence stream */
+.stream-chart {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.stream-chart svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.stream-chart polyline {
+  fill: none;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.stream-gate {
+  stroke: #fff;
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+}
+.stream-gate-label {
+  position: absolute;
+  right: 4px;
+  transform: translateY(-100%);
+  color: #fff;
+  font-size: 10px;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.legend {
+  display: flex;
+  gap: 10px;
+}
+
+/* 12 use cases */
+.tile-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 4px;
+}
+.case-tile {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+}
+.tile-num {
+  font-weight: 700;
+  line-height: 13px;
+}
+.tile-name {
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 13px;
+  color: var(--text-2);
+}
+.case-tile.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+.case-tile.current .tile-name {
+  color: var(--bg);
+}
+.tile-mark {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+}
+.case-tile.current .tile-mark {
+  background: var(--bg);
+}
+
+/* chief.py */
+.chief-code {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  white-space: pre;
+  font-size: 11px;
+  line-height: 13px;
+}
+.chief-line {
+  height: 13px;
+  overflow: hidden;
+}
+.chief-line.current {
+  background: rgba(var(--accent-rgb), 0.18);
+}
+.chief-cursor {
+  display: inline-block;
+  width: 6px;
+  height: 11px;
+  margin-left: 1px;
+  vertical-align: -1px;
+  background: var(--accent);
+}
+.tok-kw {
+  color: #ff5c8a;
+}
+.tok-cls {
+  color: #4fd1e8;
+}
+.tok-str {
+  color: #c9d1dd;
+}
+.tok-com {
+  color: #4a5568;
+}
+
+/* run log */
+.log-window {
+  position: relative;
+  height: 75px;
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 15px;
+}
+.log-row {
+  display: flex;
+  height: 15px;
+  white-space: nowrap;
+}
+.log-tag {
+  flex: 0 0 64px;
+  font-weight: 700;
+}
+.log-tag[data-tag='ask'] {
+  color: #c9d1dd;
+}
+.log-tag[data-tag='jev'] {
+  color: #5b9bff;
+}
+.log-tag[data-tag='gate'] {
+  color: #f7b731;
+}
+.log-tag[data-tag='code'] {
+  color: #4fd1e8;
+}
+.log-tag[data-tag='limit'] {
+  color: #7d8aa0;
+}
+.log-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-2);
+}
+
+/* the split */
+.split-lanes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.lane-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lane-label {
+  width: 84px;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.lane-label.strong {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* guardrails */
+.guard-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.guard-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.guard-label {
+  width: 70px;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.guard-track {
+  height: 6px;
+}
+.guard-track i {
+  background: var(--pass);
+}
+.guard-value {
+  min-width: 80px;
+  text-align: right;
+  white-space: nowrap;
+}
+.guard-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  color: #f7b731;
 }
 
 .footer {

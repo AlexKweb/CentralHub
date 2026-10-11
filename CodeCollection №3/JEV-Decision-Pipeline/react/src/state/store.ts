@@ -42,6 +42,7 @@ export interface ClockState extends UrlState {
   toggleFx: () => void;
   stepCase: (dir: 1 | -1) => void;
   seekStage: (stageIndex: number) => void;
+  seekCase: (caseIndex: number) => void;
 }
 
 export const useClock = create<ClockState>()((set) => ({
@@ -51,4 +52,5 @@ export const useClock = create<ClockState>()((set) => ({
   toggleFx: () => set((s) => ({ fx: !s.fx })),
   stepCase: (dir) => set((s) => ({ t: dir > 0 ? nextCase(s.t) : prevCase(s.t) })),
   seekStage: (stageIndex) => set((s) => ({ t: jumpToStage(s.t, stageIndex) })),
+  seekCase: (caseIndex) => set((s) => ({ t: jumpToCase(s.t, caseIndex) })),
 }));

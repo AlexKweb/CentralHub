@@ -1,5 +1,5 @@
 import casesJson from '@shared/cases.json';
-import { accent, timeline } from './sim';
+import { accent } from './sim';
 import type { CasesDoc } from './sim';
 import { useClock } from './state/store';
 import { useClockLoop, useKeys, useUiTime } from './state/hooks';
@@ -25,7 +25,7 @@ export function App() {
       <Header />
       <KpiRow t={t} seed={seed} cases={CASE_LIST} />
       <CaseHeader t={t} cases={CASE_LIST} />
-      <Panels caseNumber={timeline(t).caseNumber} />
+      <Panels t={t} seed={seed} cases={CASE_LIST} />
       <Footer t={t} />
     </Frame>
   );

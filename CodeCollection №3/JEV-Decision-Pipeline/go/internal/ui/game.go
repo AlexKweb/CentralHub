@@ -8,6 +8,7 @@ import (
 
 	"jev/internal/assets"
 	"jev/internal/params"
+	"jev/internal/scene/camera"
 	"jev/internal/sim"
 )
 
@@ -27,6 +28,9 @@ type Game struct {
 	fx        bool
 	cases     []sim.Case
 	chiefText string
+	cards     sim.CardsDoc
+	rig       camera.Rig
+	scene     *sceneLayer // built on the first Draw, with the images it needs
 	fonts     fonts
 	canvas    *ebiten.Image
 	backdrop  *ebiten.Image
@@ -57,6 +61,10 @@ func New(st params.State, cases []sim.Case) (*Game, error) {
 	if err != nil {
 		return nil, err
 	}
+	cards, err := assets.LoadCards()
+	if err != nil {
+		return nil, err
+	}
 	return &Game{
 		t:         st.T,
 		seed:      st.Seed,
@@ -64,6 +72,8 @@ func New(st params.State, cases []sim.Case) (*Game, error) {
 		fx:        st.FX,
 		cases:     cases,
 		chiefText: assets.ChiefText(),
+		cards:     cards,
+		rig:       camera.NewRig(cases, cards),
 		fonts:     f,
 	}, nil
 }
@@ -109,6 +119,7 @@ func (g *Game) Draw(*ebiten.Image) {
 	if g.canvas == nil {
 		g.canvas = ebiten.NewImage(FrameWidth, FrameHeight)
 		g.layer = ebiten.NewImage(FrameWidth, FrameHeight)
+		g.scene = newSceneLayer(g.cards, g.rig)
 		g.backdrop = newBackdrop()
 		g.chrome = g.buildChrome()
 		g.logBuf = ebiten.NewImage(int(g.panelBody(Frame.RunLog).W), logWindowH)
@@ -116,6 +127,7 @@ func (g *Game) Draw(*ebiten.Image) {
 	g.canvas.DrawImage(g.backdrop, nil)
 	g.canvas.DrawImage(g.chrome, nil)
 	accent := accentColor(g.t, g.cases)
+	g.drawScene(accent)
 	g.drawHeader(accent)
 	g.drawKPIs(accent)
 	g.drawCaseHeader(accent)

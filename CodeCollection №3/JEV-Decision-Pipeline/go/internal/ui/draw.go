@@ -38,6 +38,8 @@ type fonts struct {
 	value, unit, small    text.Face // KPI numbers (44 and 20 bold), 11 bold labels and buttons
 	badge, caseTitle      text.Face // 13 and 30 extra-bold
 	micro                 text.Face // 10 regular, chart gate label
+	cardTitle, cardRow    text.Face // card and header textures, 2× the 15/11/14 px layout sizes
+	cardPlate, cardHead   text.Face
 }
 
 func newFonts() (fonts, error) {
@@ -63,6 +65,10 @@ func newFonts() (fonts, error) {
 		badge:     newFace(extraBold, 13),
 		caseTitle: newFace(extraBold, 30),
 		micro:     newFace(regular, 10),
+		cardTitle: newFace(bold, 30),
+		cardRow:   newFace(regular, 22),
+		cardPlate: newFace(bold, 18),
+		cardHead:  newFace(bold, 28),
 	}, nil
 }
 

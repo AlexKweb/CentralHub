@@ -13,6 +13,7 @@ M32 = 0xFFFFFFFF
 CASES = 12
 CASE_SECONDS = 8.0
 CYCLE_SECONDS = 96.0
+STAGE_EPS = 1e-9  # jumpToStage lands on exact boundaries; float subtraction may undershoot them
 STAGES = ["state", "ask", "jev", "gate", "code"]
 STAGE_STARTS = [0.0, 1.2, 2.8, 4.4, 6.0]
 STAGE_DURATIONS = [1.2, 1.6, 1.6, 1.6, 2.0]
@@ -155,9 +156,9 @@ def timeline(t: float) -> dict:
     local = max(0.0, tt - ci * CASE_SECONDS)
     si = 0
     for i in range(5):
-        if STAGE_STARTS[i] <= local:
+        if STAGE_STARTS[i] <= local + STAGE_EPS:
             si = i
-    elapsed = local - STAGE_STARTS[si]
+    elapsed = max(0.0, local - STAGE_STARTS[si])
     return {
         "cycle": cycle,
         "caseIndex": ci,

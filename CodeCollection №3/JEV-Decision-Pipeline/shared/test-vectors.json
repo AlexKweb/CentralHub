@@ -350,11 +350,11 @@
     "cycle": 0,
     "caseIndex": 6,
     "caseNumber": 7,
-    "stageIndex": 2,
-    "stage": "jev",
+    "stageIndex": 3,
+    "stage": "gate",
     "local": 4.399999999999999,
-    "stageElapsed": 1.5999999999999988,
-    "stageProgress": 0.9999999999999992,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
     "caseProgress": 0.5499999999999998
    }
   },
@@ -1010,9 +1010,9 @@
   {
    "t": 52.4,
    "out": {
-    "text": "-.--",
-    "hundredths": null,
-    "badge": null,
+    "text": "0.00",
+    "hundredths": 0,
+    "badge": "REVIEW",
     "fill": 0.0
    }
   },
@@ -1275,7 +1275,7 @@
   },
   {
    "t": 52.4,
-   "out": "Score · clause_risk"
+   "out": "Score · clause_risk → high 0.79 → review"
   },
   {
    "t": 52.5,
@@ -1892,13 +1892,14 @@
     "lit": [
      "s.contract",
      "q.clause_risk",
-     "j.score_head"
+     "j.score_head",
+     "g.review"
     ],
     "ball": {
-     "from": "q.clause_risk",
-     "to": "j.score_head",
-     "progress": 1.0,
-     "arrived": true
+     "from": "j.score_head",
+     "to": "g.review",
+     "progress": 0.0,
+     "arrived": false
     },
     "plates": [
      {
@@ -6662,6 +6663,1928 @@
    "type": 2,
    "x": 1,
    "out": 0.7652700814612754
+  }
+ ],
+ "stageJumps": [
+  {
+   "case": 0,
+   "stage": 0,
+   "t": 0.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 0,
+   "stage": 0,
+   "t": 192.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 0,
+   "stage": 1,
+   "t": 1.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.15
+   }
+  },
+  {
+   "case": 0,
+   "stage": 1,
+   "t": 193.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 0,
+   "stage": 2,
+   "t": 2.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.35
+   }
+  },
+  {
+   "case": 0,
+   "stage": 2,
+   "t": 194.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 0,
+   "stage": 3,
+   "t": 4.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.4,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.55
+   }
+  },
+  {
+   "case": 0,
+   "stage": 3,
+   "t": 196.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 0,
+   "stage": 4,
+   "t": 6.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 0,
+   "stage": 4,
+   "t": 198.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 0,
+    "caseNumber": 1,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 1,
+   "stage": 0,
+   "t": 8.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 1,
+   "stage": 0,
+   "t": 200.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 1,
+   "stage": 1,
+   "t": 9.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999993,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.1499999999999999
+   }
+  },
+  {
+   "case": 1,
+   "stage": 1,
+   "t": 201.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 1,
+   "stage": 2,
+   "t": 10.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000007,
+    "stageElapsed": 8.881784197001252e-16,
+    "stageProgress": 5.551115123125783e-16,
+    "caseProgress": 0.3500000000000001
+   }
+  },
+  {
+   "case": 1,
+   "stage": 2,
+   "t": 202.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 1,
+   "stage": 3,
+   "t": 12.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.4,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.55
+   }
+  },
+  {
+   "case": 1,
+   "stage": 3,
+   "t": 204.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 1,
+   "stage": 4,
+   "t": 14.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 1,
+   "stage": 4,
+   "t": 206.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 1,
+    "caseNumber": 2,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 2,
+   "stage": 0,
+   "t": 16.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 2,
+   "stage": 0,
+   "t": 208.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 2,
+   "stage": 1,
+   "t": 17.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999993,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.1499999999999999
+   }
+  },
+  {
+   "case": 2,
+   "stage": 1,
+   "t": 209.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 2,
+   "stage": 2,
+   "t": 18.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000007,
+    "stageElapsed": 8.881784197001252e-16,
+    "stageProgress": 5.551115123125783e-16,
+    "caseProgress": 0.3500000000000001
+   }
+  },
+  {
+   "case": 2,
+   "stage": 2,
+   "t": 210.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 2,
+   "stage": 3,
+   "t": 20.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999999,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999998
+   }
+  },
+  {
+   "case": 2,
+   "stage": 3,
+   "t": 212.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 2,
+   "stage": 4,
+   "t": 22.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 2,
+   "stage": 4,
+   "t": 214.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 2,
+    "caseNumber": 3,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 3,
+   "stage": 0,
+   "t": 24.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 3,
+   "stage": 0,
+   "t": 216.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 3,
+   "stage": 1,
+   "t": 25.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999993,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.1499999999999999
+   }
+  },
+  {
+   "case": 3,
+   "stage": 1,
+   "t": 217.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 3,
+   "stage": 2,
+   "t": 26.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000007,
+    "stageElapsed": 8.881784197001252e-16,
+    "stageProgress": 5.551115123125783e-16,
+    "caseProgress": 0.3500000000000001
+   }
+  },
+  {
+   "case": 3,
+   "stage": 2,
+   "t": 218.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 3,
+   "stage": 3,
+   "t": 28.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999999,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999998
+   }
+  },
+  {
+   "case": 3,
+   "stage": 3,
+   "t": 220.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 3,
+   "stage": 4,
+   "t": 30.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 3,
+   "stage": 4,
+   "t": 222.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 3,
+    "caseNumber": 4,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 4,
+   "stage": 0,
+   "t": 32.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 4,
+   "stage": 0,
+   "t": 224.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 4,
+   "stage": 1,
+   "t": 33.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 4,
+   "stage": 1,
+   "t": 225.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 4,
+   "stage": 2,
+   "t": 34.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 4,
+   "stage": 2,
+   "t": 226.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 4,
+   "stage": 3,
+   "t": 36.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999999,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999998
+   }
+  },
+  {
+   "case": 4,
+   "stage": 3,
+   "t": 228.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 4,
+   "stage": 4,
+   "t": 38.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 4,
+   "stage": 4,
+   "t": 230.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 4,
+    "caseNumber": 5,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 5,
+   "stage": 0,
+   "t": 40.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 5,
+   "stage": 0,
+   "t": 232.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 5,
+   "stage": 1,
+   "t": 41.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 5,
+   "stage": 1,
+   "t": 233.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 5,
+   "stage": 2,
+   "t": 42.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 5,
+   "stage": 2,
+   "t": 234.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 5,
+   "stage": 3,
+   "t": 44.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999999,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999998
+   }
+  },
+  {
+   "case": 5,
+   "stage": 3,
+   "t": 236.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 5,
+   "stage": 4,
+   "t": 46.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 5,
+   "stage": 4,
+   "t": 238.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 5,
+    "caseNumber": 6,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 6,
+   "stage": 0,
+   "t": 48.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 6,
+   "stage": 0,
+   "t": 240.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 6,
+   "stage": 1,
+   "t": 49.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 6,
+   "stage": 1,
+   "t": 241.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 6,
+   "stage": 2,
+   "t": 50.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 6,
+   "stage": 2,
+   "t": 242.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 6,
+   "stage": 3,
+   "t": 52.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999999,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999998
+   }
+  },
+  {
+   "case": 6,
+   "stage": 3,
+   "t": 244.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 6,
+   "stage": 4,
+   "t": 54.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 6,
+   "stage": 4,
+   "t": 246.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 6,
+    "caseNumber": 7,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 7,
+   "stage": 0,
+   "t": 56.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 7,
+   "stage": 0,
+   "t": 248.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 7,
+   "stage": 1,
+   "t": 57.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 7,
+   "stage": 1,
+   "t": 249.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 7,
+   "stage": 2,
+   "t": 58.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 7,
+   "stage": 2,
+   "t": 250.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 7,
+   "stage": 3,
+   "t": 60.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999999,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999998
+   }
+  },
+  {
+   "case": 7,
+   "stage": 3,
+   "t": 252.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 7,
+   "stage": 4,
+   "t": 62.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 7,
+   "stage": 4,
+   "t": 254.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 7,
+    "caseNumber": 8,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 8,
+   "stage": 0,
+   "t": 64.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 8,
+   "stage": 0,
+   "t": 256.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 8,
+   "stage": 1,
+   "t": 65.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 8,
+   "stage": 1,
+   "t": 257.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 8,
+   "stage": 2,
+   "t": 66.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 8,
+   "stage": 2,
+   "t": 258.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 8,
+   "stage": 3,
+   "t": 68.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 8,
+   "stage": 3,
+   "t": 260.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999977,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999972
+   }
+  },
+  {
+   "case": 8,
+   "stage": 4,
+   "t": 70.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 8,
+   "stage": 4,
+   "t": 262.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 8,
+    "caseNumber": 9,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 9,
+   "stage": 0,
+   "t": 72.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 9,
+   "stage": 0,
+   "t": 264.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 9,
+   "stage": 1,
+   "t": 73.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 9,
+   "stage": 1,
+   "t": 265.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 9,
+   "stage": 2,
+   "t": 74.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 9,
+   "stage": 2,
+   "t": 266.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 9,
+   "stage": 3,
+   "t": 76.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 9,
+   "stage": 3,
+   "t": 268.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999977,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999972
+   }
+  },
+  {
+   "case": 9,
+   "stage": 4,
+   "t": 78.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 9,
+   "stage": 4,
+   "t": 270.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 9,
+    "caseNumber": 10,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 10,
+   "stage": 0,
+   "t": 80.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 10,
+   "stage": 0,
+   "t": 272.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 10,
+   "stage": 1,
+   "t": 81.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 10,
+   "stage": 1,
+   "t": 273.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 10,
+   "stage": 2,
+   "t": 82.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 10,
+   "stage": 2,
+   "t": 274.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 10,
+   "stage": 3,
+   "t": 84.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 10,
+   "stage": 3,
+   "t": 276.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999977,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999972
+   }
+  },
+  {
+   "case": 10,
+   "stage": 4,
+   "t": 86.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 10,
+   "stage": 4,
+   "t": 278.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 10,
+    "caseNumber": 11,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 11,
+   "stage": 0,
+   "t": 88.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 11,
+   "stage": 0,
+   "t": 280.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 0,
+    "stage": "state",
+    "local": 0.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.0
+   }
+  },
+  {
+   "case": 11,
+   "stage": 1,
+   "t": 89.2,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.2000000000000028,
+    "stageElapsed": 2.886579864025407e-15,
+    "stageProgress": 1.8041124150158794e-15,
+    "caseProgress": 0.15000000000000036
+   }
+  },
+  {
+   "case": 11,
+   "stage": 1,
+   "t": 281.2,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 1,
+    "stage": "ask",
+    "local": 1.1999999999999886,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.14999999999999858
+   }
+  },
+  {
+   "case": 11,
+   "stage": 2,
+   "t": 90.8,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.799999999999997,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.34999999999999964
+   }
+  },
+  {
+   "case": 11,
+   "stage": 2,
+   "t": 282.8,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 2,
+    "stage": "jev",
+    "local": 2.8000000000000114,
+    "stageElapsed": 1.1546319456101628e-14,
+    "stageProgress": 7.216449660063518e-15,
+    "caseProgress": 0.3500000000000014
+   }
+  },
+  {
+   "case": 11,
+   "stage": 3,
+   "t": 92.4,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.400000000000006,
+    "stageElapsed": 5.329070518200751e-15,
+    "stageProgress": 3.3306690738754696e-15,
+    "caseProgress": 0.5500000000000007
+   }
+  },
+  {
+   "case": 11,
+   "stage": 3,
+   "t": 284.4,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 3,
+    "stage": "gate",
+    "local": 4.399999999999977,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.5499999999999972
+   }
+  },
+  {
+   "case": 11,
+   "stage": 4,
+   "t": 94.0,
+   "out": {
+    "cycle": 0,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
+  },
+  {
+   "case": 11,
+   "stage": 4,
+   "t": 286.0,
+   "out": {
+    "cycle": 2,
+    "caseIndex": 11,
+    "caseNumber": 12,
+    "stageIndex": 4,
+    "stage": "code",
+    "local": 6.0,
+    "stageElapsed": 0.0,
+    "stageProgress": 0.0,
+    "caseProgress": 0.75
+   }
   }
  ],
  "jumps": [

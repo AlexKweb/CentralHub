@@ -43,6 +43,8 @@ type sceneLayer struct {
 	verts     []ebiten.Vertex
 	linkBatch triBatch
 	curvePts  []screenPt
+	ballTex   *ebiten.Image
+	ballBatch triBatch
 }
 
 type cardPlace struct {
@@ -73,7 +75,7 @@ type segment struct {
 func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
 	s := &sceneLayer{
 		rig: rig, sprites: make(map[string]*sprite), centers: make(map[string]scmath.Vec3),
-		grid: gridSegments(), halo: haloTexture(), white: whiteTexture(),
+		grid: gridSegments(), halo: haloTexture(), white: whiteTexture(), ballTex: ballTexture(),
 	}
 	for ci, col := range doc.Columns {
 		clr := hexColor(col.Color)
@@ -96,7 +98,7 @@ func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
 	return s
 }
 
-// drawScene paints the 3D layer into the scene zone: grid, then headers and cards back to front, halos behind lit cards.
+// drawScene paints the 3D layer into the scene zone: grid, links and the active path, then headers and cards back to front, and the ball on top.
 func (g *Game) drawScene(accent color.NRGBA) {
 	s := g.scene
 	pose := s.rig.Pose(g.t)
@@ -111,10 +113,15 @@ func (g *Game) drawScene(accent color.NRGBA) {
 		plates[p.Card] = p.Text
 	}
 	live := g.liveConfidence()
+	var flashID string
+	var flash float64
+	if act.Ball.Arrived {
+		flashID, flash = act.Ball.To, flashAmount(sim.Timeline(g.t).StageProgress)
+	}
 
 	g.clipped(Frame.Scene, func() {
 		drawGrid(g.canvas, pr, s.grid)
-		g.drawLinks(pr)
+		g.drawLinks(pr, act.Lit, accent)
 		type entry struct {
 			depth  float64
 			card   int // index into s.cards, or -1
@@ -135,15 +142,20 @@ func (g *Game) drawScene(accent color.NRGBA) {
 		for _, e := range order {
 			if e.card >= 0 {
 				c := s.cards[e.card]
-				g.drawCardPlace(pr, c, lit[c.id], accent, plates[c.id], live)
+				f := 0.0
+				if c.id == flashID {
+					f = flash
+				}
+				g.drawCardPlace(pr, c, lit[c.id], accent, plates[c.id], live, f)
 			} else {
 				g.drawHeaderPlace(pr, s.headers[e.header])
 			}
 		}
+		g.drawBall(pr, act.Ball, accent)
 	})
 }
 
-func (g *Game) drawCardPlace(pr scmath.Projector, c cardPlace, isLit bool, accent color.NRGBA, plate, live string) {
+func (g *Game) drawCardPlace(pr scmath.Projector, c cardPlace, isLit bool, accent color.NRGBA, plate, live string, flash float64) {
 	st := cardState{Title: c.card.Title, Color: c.color, Rows: append([]sim.Row(nil), c.card.Rows...)}
 	if isLit {
 		st.Lit, st.Accent, st.Plate = true, accent, plate
@@ -161,6 +173,9 @@ func (g *Game) drawCardPlace(pr scmath.Projector, c cardPlace, isLit bool, accen
 	if isLit {
 		g.scene.quad(g.canvas, pr, scmath.Vec3{c.center[0], c.center[1], c.center[2] + haloLift},
 			cardHalfW+haloMargin, cardHalfH+haloMargin, g.scene.halo, 1, 1, glowColor(accent))
+	}
+	if flash > 0 {
+		g.drawFlash(pr, c.center, accent, flash)
 	}
 	g.scene.quad(g.canvas, pr, c.center, cardHalfW, cardHalfH, img, meshCols, meshRows, [4]float32{1, 1, 1, 1})
 }

@@ -133,7 +133,11 @@ func linkStroke(name string, alpha float64) [4]float32 {
 	if !ok {
 		hex = linkHex["white"]
 	}
-	c := hexColor(hex)
+	return strokeColor(hexColor(hex), alpha)
+}
+
+// strokeColor is the straight-alpha vertex colour of c at opacity alpha.
+func strokeColor(c color.NRGBA, alpha float64) [4]float32 {
 	return [4]float32{float32(c.R) / 255, float32(c.G) / 255, float32(c.B) / 255, float32(alpha)}
 }
 
@@ -144,13 +148,14 @@ func whiteTexture() *ebiten.Image {
 	return img
 }
 
-// drawLinks paints every link into one additive batch; it runs after the grid and before the cards, so cards hide the links.
-func (g *Game) drawLinks(pr scmath.Projector) {
+// drawLinks paints every link and the active path into one additive batch; it runs after the grid and before the cards, so cards hide them.
+func (g *Game) drawLinks(pr scmath.Projector, lit []string, accent color.NRGBA) {
 	s := g.scene
 	s.linkBatch.reset()
 	for _, l := range s.links {
 		s.curvePts = projectCurve(pr, linkCurve(l.from, l.to), s.curvePts[:0])
 		s.linkBatch.line(s.curvePts, linkHalfW, linkFeather, l.clr)
 	}
+	g.addActivePath(pr, lit, accent)
 	s.linkBatch.draw(g.canvas, s.white)
 }

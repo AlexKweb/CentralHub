@@ -1,0 +1,71 @@
+import { test, expect } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const frames = [
+  { id: 'F1', t: 7.6, caseNo: 1, stage: 'code' },
+  { id: 'F2', t: 13.68, caseNo: 2, stage: 'gate' },
+  { id: 'F3', t: 58.48, caseNo: 8, stage: 'ask' },
+  { id: 'F4', t: 28.08, caseNo: 4, stage: 'jev' },
+];
+
+// SPEC §3 edges in logical px; each zone from layout() must sit within ±8 px.
+const spec: Record<string, { top: number; bottom: number; left?: number; right?: number }> = {
+  header: { top: 16, bottom: 48 },
+  kpi0: { top: 58, bottom: 188, left: 14, right: 310 },
+  kpi1: { top: 58, bottom: 188, left: 320, right: 616 },
+  kpi2: { top: 58, bottom: 188, left: 626, right: 922 },
+  kpi3: { top: 58, bottom: 188, left: 932, right: 1228 },
+  case: { top: 196, bottom: 262 },
+  scene: { top: 262, bottom: 1180 },
+  parallel: { top: 1186, bottom: 1396, left: 14, right: 312 },
+  confidence: { top: 1186, bottom: 1396, left: 322, right: 612 },
+  useCases: { top: 1186, bottom: 1396, left: 626, right: 920 },
+  chief: { top: 1186, bottom: 1396, left: 932, right: 1228 },
+  runLog: { top: 1404, bottom: 1524, left: 14, right: 498 },
+  split: { top: 1404, bottom: 1524, left: 506, right: 870 },
+  guardrails: { top: 1404, bottom: 1524, left: 878, right: 1228 },
+  footer: { top: 1532, bottom: 1568 },
+};
+
+for (const f of frames) {
+  test(`${f.id}: t=${f.t} shows case ${f.caseNo} ${f.stage}`, async ({ page }) => {
+    const problems: string[] = [];
+    const external: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') problems.push(msg.text());
+    });
+    page.on('pageerror', (err) => problems.push(err.message));
+    page.on('request', (req) => {
+      const url = new URL(req.url());
+      if (url.protocol !== 'data:' && url.protocol !== 'blob:' && !['localhost', '127.0.0.1'].includes(url.hostname)) {
+        external.push(req.url());
+      }
+    });
+
+    await page.goto(`/?seed=1&paused=1&t=${f.t}`);
+    await page.waitForFunction(() => (window as any).__jev?.ready === true, undefined, { timeout: 60_000 });
+
+    const state = await page.evaluate(() => (window as any).__jev.state());
+    expect(state).toMatchObject({ case: f.caseNo, stage: f.stage, paused: true });
+    expect(state.t).toBeCloseTo(f.t, 9);
+
+    const layout: Record<string, { x: number; y: number; w: number; h: number }> = await page.evaluate(() =>
+      (window as any).__jev.layout(),
+    );
+    for (const [name, want] of Object.entries(spec)) {
+      const z = layout[name];
+      expect(z, name).toBeDefined();
+      expect(Math.abs(z.y - want.top), `${name} top`).toBeLessThanOrEqual(8);
+      expect(Math.abs(z.y + z.h - want.bottom), `${name} bottom`).toBeLessThanOrEqual(8);
+      if (want.left !== undefined) expect(Math.abs(z.x - want.left), `${name} left`).toBeLessThanOrEqual(8);
+      if (want.right !== undefined) expect(Math.abs(z.x + z.w - want.right), `${name} right`).toBeLessThanOrEqual(8);
+    }
+
+    fs.mkdirSync(path.join(__dirname, 'report'), { recursive: true });
+    await page.screenshot({ path: path.join(__dirname, 'report', `go-${f.id}.png`) });
+
+    expect(problems, 'console errors').toEqual([]);
+    expect(external, 'non-localhost requests').toEqual([]);
+  });
+}

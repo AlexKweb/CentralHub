@@ -32,7 +32,6 @@ export function useCanvasTexture(
     const tex = new CanvasTexture(canvas);
     tex.colorSpace = SRGBColorSpace;
     return tex;
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- the key is the dependency
   }, [key]);
   useEffect(() => () => texture.dispose(), [texture]);
   return texture;

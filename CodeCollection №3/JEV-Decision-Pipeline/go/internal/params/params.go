@@ -24,9 +24,6 @@ type State struct {
 
 var stageNames = [...]string{"state", "ask", "jev", "gate", "code"}
 
-// stageNudge keeps a stage jump on its own stage: an exact boundary can resolve to the previous stage after float rounding.
-const stageNudge = 1e-6
-
 // Parse reads t, seed, paused, case, stage and fx. Empty values count as absent.
 // Keys apply in the order t, case, stage: case jumps to the start of that case and
 // stage jumps within the resulting case. Invalid values keep their default; the
@@ -84,7 +81,7 @@ func Parse(q map[string]string) (State, error) {
 		if err != nil {
 			fail("stage", err)
 		} else {
-			st.T = sim.JumpToStage(st.T, si) + stageNudge
+			st.T = sim.JumpToStage(st.T, si)
 		}
 	}
 	return st, errors.Join(errs...)

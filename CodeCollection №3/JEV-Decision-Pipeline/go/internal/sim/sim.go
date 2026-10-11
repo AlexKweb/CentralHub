@@ -96,11 +96,11 @@ func Timeline(t float64) TimelineResult {
 	local := math.Max(0, tt-float64(ci)*CaseSeconds)
 	si := 0
 	for i, start := range stageStarts {
-		if start <= local {
+		if start <= local+stageEps {
 			si = i
 		}
 	}
-	elapsed := local - stageStarts[si]
+	elapsed := math.Max(0, local-stageStarts[si])
 	return TimelineResult{
 		Cycle:         int(cycle),
 		CaseIndex:     ci,

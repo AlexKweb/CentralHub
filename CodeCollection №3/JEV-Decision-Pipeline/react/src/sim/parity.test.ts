@@ -61,6 +61,7 @@ interface VectorFile {
   split: TimeEntry[];
   spark: TimeEntry[];
   stream: { t: number; type: number; x: number; out: unknown }[];
+  stageJumps: { case: number; stage: number; t: number; out: unknown }[];
   jumps: { t: number; toCase: number[]; toStage: number[]; next: number; prev: number }[];
 }
 
@@ -91,6 +92,7 @@ const EXPECTED_COUNTS = {
   split: 28,
   spark: 5,
   stream: 36,
+  stageJumps: 120,
   jumps: 6,
 } as const;
 
@@ -253,6 +255,18 @@ describe('parity with shared/test-vectors.json', () => {
   it('stream', () => {
     const n = runSection('stream', vectors.stream, (v) => diff(stream(v.t, SEED, v.type, v.x), v.out));
     expect(n).toBe(EXPECTED_COUNTS.stream);
+  });
+
+  it('stageJumps', () => {
+    const n = runSection('stageJumps', vectors.stageJumps, (v) => {
+      const tl = timeline(v.t);
+      const landed =
+        tl.caseIndex === v.case && tl.stageIndex === v.stage
+          ? []
+          : [`$.landed: case ${tl.caseIndex} stage ${tl.stageIndex}`];
+      return [...diff(tl, v.out), ...landed];
+    });
+    expect(n).toBe(EXPECTED_COUNTS.stageJumps);
   });
 
   it('jumps', () => {

@@ -1,11 +1,12 @@
 import { addAfterEffect, useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
+import type { PerspectiveCamera } from 'three';
 import { accent, active, cardPosition, timeline } from '../sim';
 import type { Case, Column, Vec3 } from '../sim';
 import { fmtHundredths, hundredths } from '../sim/util';
 import { useClock } from '../state/store';
 import { markSceneRendered } from '../state/jevHook';
-import { cameraPose } from './camera';
+import { cameraPose, viewOffset } from './camera';
 import { cardView, cardKey } from './cardView';
 import type { CardView } from './cardView';
 import { CARD_PLANE, HEADER_PLANE, cardCenters, cardsDoc, headerPosition } from './layout';
@@ -54,12 +55,14 @@ export function Scene({ t, cases }: { t: number; cases: readonly Case[] }) {
 }
 
 function CameraRig({ cases }: { cases: readonly Case[] }) {
-  const camera = useThree((s) => s.camera);
+  const camera = useThree((s) => s.camera as PerspectiveCamera);
+  const size = useThree((s) => s.size);
   useFrame(() => {
     const pose = cameraPose(useClock.getState().t, cases, CENTERS);
     camera.position.set(...pose.position);
     camera.up.set(...pose.up);
     camera.lookAt(...pose.target);
+    camera.setViewOffset(...viewOffset(size.width, size.height));
   });
   return null;
 }

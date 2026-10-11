@@ -4,15 +4,18 @@ import type { Case, StageName, Vec3 } from '../sim';
 const DEG = Math.PI / 180;
 /** Stages last at least 1.2 s, so each blend from the previous stage completes inside its own stage. */
 const BLEND_SECONDS = 0.9;
-const SWAY_DEG = 1.5;
+const SWAY_YAW_DEG = 1.5;
+const SWAY_PITCH_DEG = 0.8;
+/** The target projects to 721 of 1568 px: the scene zone centre. */
+const FOCUS_Y = 721 / 1568;
 
-/** SPEC §6.4: yaw, pitch and roll in degrees, distance in world units. */
+/** Per-stage presets: yaw, pitch and roll in degrees, distance in world units. */
 export const STAGE_CAMERA: Record<StageName, { yaw: number; pitch: number; roll: number; distance: number }> = {
-  state: { yaw: 18, pitch: -8, roll: -4, distance: 9 },
-  ask: { yaw: 14, pitch: -6, roll: -3, distance: 8 },
-  jev: { yaw: 4, pitch: -3, roll: 0, distance: 10 },
-  gate: { yaw: -6, pitch: -2, roll: 0, distance: 8 },
-  code: { yaw: -3, pitch: 0, roll: 0, distance: 11 },
+  state: { yaw: 18, pitch: -8, roll: -4, distance: 21 },
+  ask: { yaw: 14, pitch: -6, roll: -3, distance: 19 },
+  jev: { yaw: 4, pitch: -3, roll: 0, distance: 23 },
+  gate: { yaw: -6, pitch: -2, roll: 0, distance: 19 },
+  code: { yaw: -3, pitch: 0, roll: 0, distance: 25 },
 };
 
 export interface CameraPose {
@@ -30,11 +33,18 @@ export interface CameraFrame {
   distance: number;
 }
 
+/** The stage target sits halfway between the card and the origin in x, so the rig frames the card pair. */
 function stageFrame(cardId: string, stage: StageName, centers: ReadonlyMap<string, Vec3>): CameraFrame {
-  const target = centers.get(cardId);
-  if (!target) throw new Error(`camera target: unknown card ${cardId}`);
+  const c = centers.get(cardId);
+  if (!c) throw new Error(`camera target: unknown card ${cardId}`);
   const p = STAGE_CAMERA[stage];
-  return { target, yaw: p.yaw * DEG, pitch: p.pitch * DEG, roll: p.roll * DEG, distance: p.distance };
+  return {
+    target: [0.5 * c[0], c[1], 0],
+    yaw: p.yaw * DEG,
+    pitch: p.pitch * DEG,
+    roll: p.roll * DEG,
+    distance: p.distance,
+  };
 }
 
 function easeOutCubic(x: number): number {
@@ -77,7 +87,7 @@ export function blendedFrame(t: number, cases: readonly Case[], centers: Readonl
 
 export function poseOf(f: CameraFrame): CameraPose {
   const cp = Math.cos(f.pitch);
-  const dir: Vec3 = [Math.sin(f.yaw) * cp, Math.sin(f.pitch), Math.cos(f.yaw) * cp];
+  const dir: Vec3 = [Math.sin(f.yaw) * cp, -Math.sin(f.pitch), Math.cos(f.yaw) * cp];
   const position: Vec3 = [
     f.target[0] + f.distance * dir[0],
     f.target[1] + f.distance * dir[1],
@@ -100,7 +110,12 @@ export function cameraPose(t: number, cases: readonly Case[], centers: ReadonlyM
   const f = blendedFrame(t, cases, centers);
   return poseOf({
     ...f,
-    yaw: f.yaw + SWAY_DEG * DEG * Math.sin(t * 0.37),
-    pitch: f.pitch + SWAY_DEG * DEG * Math.sin(t * 0.23 + 1.1),
+    yaw: f.yaw + SWAY_YAW_DEG * DEG * Math.sin(0.4 * t),
+    pitch: f.pitch + SWAY_PITCH_DEG * DEG * Math.sin(0.31 * t + 1),
   });
+}
+
+/** Arguments for `PerspectiveCamera.setViewOffset`: shifts the principal point so the target lands on FOCUS_Y. */
+export function viewOffset(width: number, height: number): [number, number, number, number, number, number] {
+  return [width, height, 0, height / 2 - FOCUS_Y * height, width, height];
 }

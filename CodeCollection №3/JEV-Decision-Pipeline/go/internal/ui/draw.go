@@ -3,6 +3,7 @@ package ui
 import (
 	"bytes"
 	"image/color"
+	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
@@ -33,6 +34,8 @@ const (
 
 type fonts struct {
 	title, label, caption text.Face
+	value, unit, small    text.Face // KPI numbers (44 and 20 bold), 11 bold labels and buttons
+	badge, caseTitle      text.Face // 13 and 30 extra-bold
 }
 
 func newFonts() (fonts, error) {
@@ -44,11 +47,28 @@ func newFonts() (fonts, error) {
 	if err != nil {
 		return fonts{}, err
 	}
+	extraBold, err := text.NewGoTextFaceSource(bytes.NewReader(assets.FontExtraBold()))
+	if err != nil {
+		return fonts{}, err
+	}
 	return fonts{
-		title:   &text.GoTextFace{Source: bold, Size: 18},
-		label:   &text.GoTextFace{Source: regular, Size: 13},
-		caption: &text.GoTextFace{Source: regular, Size: 11},
+		title:     newFace(bold, 18),
+		label:     newFace(regular, 13),
+		caption:   newFace(regular, 11),
+		value:     newFace(bold, 44),
+		unit:      newFace(bold, 20),
+		small:     newFace(bold, 11),
+		badge:     newFace(extraBold, 13),
+		caseTitle: newFace(extraBold, 30),
 	}, nil
+}
+
+// newFace turns off JetBrains Mono's ligatures and contextual alternates, so >= stays two glyphs as in the design.
+func newFace(src *text.GoTextFaceSource, size float64) *text.GoTextFace {
+	f := &text.GoTextFace{Source: src, Size: size}
+	f.SetFeature(text.MustParseTag("liga"), 0)
+	f.SetFeature(text.MustParseTag("calt"), 0)
+	return f
 }
 
 // newBackdrop paints the scene base once: #05070B with dark bands above y=200 and below y=1150.
@@ -66,22 +86,31 @@ func newBackdrop() *ebiten.Image {
 	return img
 }
 
-// boxedZones lists the zones drawn as empty panels; header, scene and footer are drawn separately.
+// boxedZones lists the zones drawn as empty panels; header, KPI cards, case header, scene and footer are drawn separately.
 func boxedZones() []Rect {
 	z := Frame
-	return append([]Rect{z.Case, z.Parallel, z.Confidence, z.UseCases, z.Chief, z.RunLog, z.Split, z.Guardrails}, z.KPIs[:]...)
+	return []Rect{z.Parallel, z.Confidence, z.UseCases, z.Chief, z.RunLog, z.Split, z.Guardrails}
 }
 
 // drawBox paints an empty panel: dark fill, 1 px #1E2636 border, rounded corners.
 func drawBox(dst *ebiten.Image, r Rect) {
-	p := roundRect(r)
+	p := roundRect(r, boxRadius)
 	vector.FillPath(dst, p, &vector.FillOptions{}, pathOptions(colPanel))
 	vector.StrokePath(dst, p, &vector.StrokeOptions{Width: 1}, pathOptions(colBorder))
 }
 
+// fillRound and strokeRound paint rounded rectangles with corner radius k.
+func fillRound(dst *ebiten.Image, r Rect, k float64, clr color.Color) {
+	vector.FillPath(dst, roundRect(r, k), &vector.FillOptions{}, pathOptions(clr))
+}
+
+func strokeRound(dst *ebiten.Image, r Rect, k float64, clr color.Color) {
+	vector.StrokePath(dst, roundRect(r, k), &vector.StrokeOptions{Width: 1}, pathOptions(clr))
+}
+
 // roundRect is inset by half a pixel so the 1 px border stays crisp.
-func roundRect(r Rect) *vector.Path {
-	const k = boxRadius
+func roundRect(r Rect, radius float64) *vector.Path {
+	k := float32(radius)
 	x0, y0 := float32(r.X)+0.5, float32(r.Y)+0.5
 	x1, y1 := float32(r.X+r.W)-0.5, float32(r.Y+r.H)-0.5
 	var p vector.Path
@@ -139,6 +168,45 @@ func drawText(dst *ebiten.Image, s string, face text.Face, x, cy float64, clr co
 func textWidth(s string, face text.Face) float64 {
 	w, _ := text.Measure(s, face, 0)
 	return w
+}
+
+func withAlpha(c color.NRGBA, a float64) color.NRGBA {
+	c.A = uint8(math.Round(a * 255))
+	return c
+}
+
+// fillRect takes logical coordinates as float64 so layout code can stay in one unit.
+func fillRect(dst *ebiten.Image, x, y, w, h float64, clr color.Color) {
+	vector.FillRect(dst, float32(x), float32(y), float32(w), float32(h), clr, false)
+}
+
+// lineH is the CSS "normal" line height of face: ascent plus descent.
+func lineH(face text.Face) float64 {
+	m := face.Metrics()
+	return m.HAscent + m.HDescent
+}
+
+// baselineOf is the baseline of a line of text in a CSS line box of height lh starting at top.
+func baselineOf(face text.Face, top, lh float64) float64 {
+	return top + (lh-lineH(face))/2 + face.Metrics().HAscent
+}
+
+// drawLine draws s with its left edge at x inside a line box of height lh starting at top.
+func drawLine(dst *ebiten.Image, s string, face text.Face, x, top, lh float64, clr color.Color) {
+	drawBaseline(dst, s, face, x, baselineOf(face, top, lh), clr)
+}
+
+// drawLineRight is drawLine with the right edge at xr.
+func drawLineRight(dst *ebiten.Image, s string, face text.Face, xr, top, lh float64, clr color.Color) {
+	drawLine(dst, s, face, xr-textWidth(s, face), top, lh, clr)
+}
+
+// drawBaseline draws s with its baseline at y.
+func drawBaseline(dst *ebiten.Image, s string, face text.Face, x, y float64, clr color.Color) {
+	var op text.DrawOptions
+	op.GeoM.Translate(x, y-face.Metrics().HAscent)
+	op.ColorScale.ScaleWithColor(clr)
+	text.Draw(dst, s, face, &op)
 }
 
 func accentColor(t float64, cases []sim.Case) color.NRGBA {

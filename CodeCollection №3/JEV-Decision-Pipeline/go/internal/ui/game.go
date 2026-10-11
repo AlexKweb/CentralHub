@@ -47,7 +47,7 @@ func New(st params.State, cases []sim.Case) (*Game, error) {
 	}, nil
 }
 
-// Update advances the clock at 60 Hz unless paused; Space toggles pause and ←/→ step cases.
+// Update advances the clock at 60 Hz unless paused; Space toggles pause, ←/→ step cases and a click on a stage button jumps to it.
 func (g *Game) Update() error {
 	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 		g.paused = !g.paused
@@ -57,6 +57,12 @@ func (g *Game) Update() error {
 	}
 	if inpututil.IsKeyJustPressed(ebiten.KeyArrowRight) {
 		g.t = sim.NextCase(g.t)
+	}
+	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		x, y := ebiten.CursorPosition()
+		if si, ok := stageAt(Frame.Case, float64(x), float64(y)); ok {
+			g.t = sim.JumpToStage(g.t, si)
+		}
 	}
 	if !g.paused {
 		g.t += 1.0 / 60
@@ -76,6 +82,8 @@ func (g *Game) Draw(*ebiten.Image) {
 		drawBox(g.canvas, r)
 	}
 	g.drawHeader(accent)
+	g.drawKPIs(accent)
+	g.drawCaseHeader(accent)
 	g.drawFooter(accent)
 	g.ready = true
 }

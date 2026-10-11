@@ -62,6 +62,9 @@ def main() -> int:
         "spark": [{"t": t, "out": s.spark(t, SEED)} for t in [0, 0.3, 7.6, 13.68, 1000.25]],
         "stream": [{"t": t, "type": ty, "x": x, "out": s.stream(t, SEED, ty, x)}
                    for t in [0, 7.6, 58.48] for ty in range(3) for x in [0, 0.25, 0.5, 1]],
+        "stageJumps": [{"case": ci, "stage": si, "t": t, "out": s.timeline(t)}
+                       for ci in range(12) for si in range(5)
+                       for t in [s.jump_to_stage(s.jump_to_case(0, ci), si), s.jump_to_stage(s.jump_to_case(200, ci), si)]],
         "jumps": [{"t": t, "toCase": [s.jump_to_case(t, ci) for ci in (0, 4, 11)],
                    "toStage": [s.jump_to_stage(t, si) for si in range(5)],
                    "next": s.next_case(t), "prev": s.prev_case(t)} for t in [0, 5.5, 13.68, 95.5, 100.0, 1000.25]],

@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "columns": [
+    {
+      "id": "state", "num": "01", "title": "STATE / EVIDENCE", "color": "#4FD1E8",
+      "cards": [
+        { "id": "s.email", "title": "email", "rows": [{ "k": "from", "v": "vendor-lookalike.tld" }, { "k": "spf_pass", "v": "false", "hl": true }, { "k": "subject", "v": "invoice #4412" }] },
+        { "id": "s.comment", "title": "comment", "rows": [{ "k": "text", "v": "how did you wire…" }, { "k": "likes", "v": "40" }, { "k": "video", "v": "systems" }] },
+        { "id": "s.lead", "title": "lead · DM", "rows": [{ "k": "source", "v": "inbound" }, { "k": "budget", "v": "mentioned", "hl": true }, { "k": "timeline", "v": "2 weeks" }] },
+        { "id": "s.dom", "title": "DOM state", "rows": [{ "k": "goal", "v": "flight < $400" }, { "k": "actions", "v": "5 visible", "hl": true }, { "k": "last_error", "v": "null" }] },
+        { "id": "s.post", "title": "post", "rows": [{ "k": "views", "v": "48 210", "hl": true }, { "k": "watchlist", "v": "true" }, { "k": "floor", "v": "5 000" }] },
+        { "id": "s.ticket", "title": "ticket", "rows": [{ "k": "plan", "v": "enterprise", "hl": true }, { "k": "category", "v": "billing" }, { "k": "prior", "v": "3" }] },
+        { "id": "s.brief", "title": "brief", "rows": [{ "k": "tools", "v": "research 3 tools" }, { "k": "sources", "v": "2 sources" }, { "k": "topic", "v": "pricing" }] },
+        { "id": "s.run", "title": "agent run", "rows": [{ "k": "steps", "v": "2" }, { "k": "last_error", "v": "null" }, { "k": "evidence", "v": "real, not vibes" }] },
+        { "id": "s.thread", "title": "skool thread", "rows": [{ "k": "member", "v": "new" }, { "k": "asks", "v": "how to start?" }, { "k": "replies", "v": "0" }] },
+        { "id": "s.transcript", "title": "transcript", "rows": [{ "k": "length", "v": "42 min" }, { "k": "speakers", "v": "4" }, { "k": "open", "v": "3 actions", "hl": true }] },
+        { "id": "s.clip", "title": "clip", "rows": [{ "k": "length", "v": "0:47" }, { "k": "hook", "v": "2.1 s", "hl": true }, { "k": "retention", "v": "61%" }] },
+        { "id": "s.contract", "title": "contract", "rows": [{ "k": "clauses", "v": "38" }, { "k": "party", "v": "new vendor" }, { "k": "term", "v": "auto-renew", "hl": true }] },
+        { "id": "s.note", "title": "brain dump", "rows": [{ "k": "words", "v": "1 240" }, { "k": "topics", "v": "7", "hl": true }, { "k": "due", "v": "friday" }] },
+        { "id": "s.tick", "title": "market tick", "rows": [{ "k": "symbol", "v": "ETH" }, { "k": "move", "v": "+2.4%", "hl": true }, { "k": "position", "v": "flat" }] }
+      ]
+    },
+    {
+      "id": "questions", "num": "02", "title": "TYPED / QUESTIONS", "color": "#FF5C8A",
+      "cards": [
+        { "id": "q.folder", "title": "Choice · folder", "rows": [{ "k": "options", "v": "5" }, { "k": "labels", "v": "billing | phishing", "hl": true }, { "k": "policy", "v": "in the text" }] },
+        { "id": "q.worth_reply", "title": "Noul · worth_reply", "rows": [{ "k": "type", "v": "yes / no", "hl": true }, { "k": "confidence", "v": "attached" }, { "k": "owner", "v": "creator" }] },
+        { "id": "q.lead_quality", "title": "Score · lead_quality", "rows": [{ "k": "labels", "v": "low .. high", "hl": true }, { "k": "ordered", "v": "true" }, { "k": "floor", "v": "0.85" }] },
+        { "id": "q.action", "title": "Choice · action", "rows": [{ "k": "menu", "v": "legal only" }, { "k": "rebuilt", "v": "every click", "hl": true }, { "k": "options", "v": "5" }] },
+        { "id": "q.viral_fit", "title": "Score · viral_fit", "rows": [{ "k": "labels", "v": "low .. high", "hl": true }, { "k": "floor", "v": "5k views" }, { "k": "desk", "v": "content" }] },
+        { "id": "q.urgency", "title": "Score · urgency", "rows": [{ "k": "labels", "v": "4" }, { "k": "range", "v": "low .. critical", "hl": true }, { "k": "team", "v": "routed" }] },
+        { "id": "q.next_worker", "title": "Choice · next_worker", "rows": [{ "k": "options", "v": "research | write", "hl": true }, { "k": "criteria", "v": "3" }, { "k": "then", "v": "route" }] },
+        { "id": "q.safe_to_run", "title": "Noul · safe_to_run", "rows": [{ "k": "default", "v": "false", "hl": true }, { "k": "goes to", "v": "human" }, { "k": "irreversible", "v": "gated" }] },
+        { "id": "q.owner", "title": "Choice · owner", "rows": [{ "k": "options", "v": "you | team | later", "hl": true }, { "k": "from", "v": "transcript" }, { "k": "due", "v": "inferred" }] },
+        { "id": "q.hook", "title": "Score · hook_strength", "rows": [{ "k": "labels", "v": "weak .. strong", "hl": true }, { "k": "window", "v": "first 3 s" }, { "k": "floor", "v": "0.85" }] },
+        { "id": "q.clause_risk", "title": "Score · clause_risk", "rows": [{ "k": "labels", "v": "low .. high", "hl": true }, { "k": "scope", "v": "38 clauses" }, { "k": "owner", "v": "legal" }] },
+        { "id": "q.enter_trade", "title": "Noul · enter_trade", "rows": [{ "k": "type", "v": "yes / no", "hl": true }, { "k": "size", "v": "capped" }, { "k": "mode", "v": "paper" }] }
+      ]
+    },
+    {
+      "id": "jev", "num": "03", "title": "JEV / SYSTEM ONE", "color": "#A99BFF",
+      "cards": [
+        { "id": "j.parallel", "title": "parallel questions", "rows": [{ "k": "share", "v": "one state", "hl": true }, { "k": "latency", "v": "barely adds" }, { "k": "n", "v": "3" }] },
+        { "id": "j.choice_head", "title": "choice head", "rows": [{ "k": "picks", "v": "one label" }, { "k": "confidence", "v": "0.93", "hl": true }, { "k": "prose", "v": "none" }] },
+        { "id": "j.no_generation", "title": "no generation", "rows": [{ "k": "chat", "v": "off", "hl": true }, { "k": "output", "v": "structured" }, { "k": "tokens out", "v": "free" }] },
+        { "id": "j.state_encoder", "title": "state encoder", "rows": [{ "k": "input", "v": "JSON-ish" }, { "k": "tokens", "v": "~1k", "hl": true }, { "k": "evidence", "v": "packed" }] },
+        { "id": "j.score_head", "title": "score head", "rows": [{ "k": "rates", "v": "ordered" }, { "k": "confidence", "v": "0.91", "hl": true }, { "k": "prose", "v": "none" }] },
+        { "id": "j.median_latency", "title": "median latency", "rows": [{ "k": "reported", "v": "~256 ms", "hl": true }, { "k": "demo", "v": "public" }, { "k": "SLA", "v": "no" }] },
+        { "id": "j.noul_head", "title": "noul head", "rows": [{ "k": "answers", "v": "yes / no" }, { "k": "confidence", "v": "0.88", "hl": true }, { "k": "prose", "v": "none" }] },
+        { "id": "j.cost", "title": "cost", "rows": [{ "k": "input", "v": "$0.042 / M", "hl": true }, { "k": "output", "v": "free" }, { "k": "10k", "v": "≈ $0.42" }] }
+      ]
+    },
+    {
+      "id": "gate", "num": "04", "title": "GATE / ROUTE", "color": "#F7B731",
+      "cards": [
+        { "id": "g.gate", "title": "gate ≥ 0.85", "rows": [{ "k": "floor", "v": "0.85", "hl": true }, { "k": "calibrate", "v": "on yours" }, { "k": "kind", "v": "starting" }] },
+        { "id": "g.quarantine", "title": "quarantine", "rows": [{ "k": "when", "v": "phishing" }, { "k": "wakes LLM", "v": "no", "hl": true }, { "k": "by", "v": "code" }] },
+        { "id": "g.draft_reply", "title": "draft reply", "rows": [{ "k": "when", "v": "worth it" }, { "k": "writer", "v": "LLM" }, { "k": "after", "v": "the gate", "hl": true }] },
+        { "id": "g.book_call", "title": "book_call", "rows": [{ "k": "when", "v": "high", "hl": true }, { "k": "else", "v": "nurture" }, { "k": "path", "v": "calendar" }] },
+        { "id": "g.type_destination", "title": "type_destination", "rows": [{ "k": "picked by", "v": "Jev", "hl": true }, { "k": "typed by", "v": "small model" }, { "k": "then", "v": "submit" }] },
+        { "id": "g.draft_short", "title": "draft_short", "rows": [{ "k": "fit", "v": "strong" }, { "k": "folder", "v": "review" }, { "k": "post", "v": "you", "hl": true }] },
+        { "id": "g.eng_oncall", "title": "eng_oncall", "rows": [{ "k": "when", "v": "critical", "hl": true }, { "k": "ping", "v": "Slack" }, { "k": "tier", "v": "enterprise" }] },
+        { "id": "g.review", "title": "review", "rows": [{ "k": "when", "v": "< 0.85", "hl": true }, { "k": "goes to", "v": "human" }, { "k": "or", "v": "bigger LLM" }] },
+        { "id": "g.assign_owner", "title": "assign_owner", "rows": [{ "k": "picked by", "v": "Jev" }, { "k": "writes", "v": "task", "hl": true }, { "k": "then", "v": "notify" }] },
+        { "id": "g.paper_trade", "title": "paper_trade", "rows": [{ "k": "when", "v": "yes" }, { "k": "size", "v": "capped", "hl": true }, { "k": "mode", "v": "paper" }] }
+      ]
+    },
+    {
+      "id": "code", "num": "05", "title": "CODE / ACTS", "color": "#C6F23A",
+      "cards": [
+        { "id": "c.mail_moved", "title": "mail moved", "rows": [{ "k": "folder", "v": "quarantine", "hl": true }, { "k": "time", "v": "ms" }, { "k": "cost", "v": "~0" }] },
+        { "id": "c.llm_writes", "title": "LLM writes", "rows": [{ "k": "reply", "v": "public" }, { "k": "only", "v": "now", "hl": true }, { "k": "tokens", "v": "well spent" }] },
+        { "id": "c.calendar", "title": "calendar", "rows": [{ "k": "link", "v": "sent", "hl": true }, { "k": "lead", "v": "qualified" }, { "k": "template", "v": "none" }] },
+        { "id": "c.code_clicks", "title": "code clicks", "rows": [{ "k": "DOM", "v": "click" }, { "k": "outcome", "v": "checked", "hl": true }, { "k": "resume", "v": "saved" }] },
+        { "id": "c.review_folder", "title": "review folder", "rows": [{ "k": "draft", "v": "saved" }, { "k": "auto-post", "v": "never", "hl": true }, { "k": "you", "v": "hit Post" }] },
+        { "id": "c.slack_ping", "title": "Slack ping", "rows": [{ "k": "to", "v": "on-call", "hl": true }, { "k": "ticket", "v": "routed" }, { "k": "sla", "v": "kept" }] },
+        { "id": "c.progress_saved", "title": "progress saved", "rows": [{ "k": "after", "v": "every call" }, { "k": "resume", "v": "last step", "hl": true }, { "k": "dupes", "v": "none" }] },
+        { "id": "c.human_gate", "title": "human gate", "rows": [{ "k": "owns", "v": "risky calls" }, { "k": "publish", "v": "never auto", "hl": true }, { "k": "limits", "v": "10 actions" }] },
+        { "id": "c.task_created", "title": "task created", "rows": [{ "k": "tracker", "v": "tasks" }, { "k": "owner", "v": "team", "hl": true }, { "k": "due", "v": "friday" }] },
+        { "id": "c.order_logged", "title": "order logged", "rows": [{ "k": "venue", "v": "paper" }, { "k": "size", "v": "0.5%", "hl": true }, { "k": "stop", "v": "set" }] }
+      ]
+    }
+  ]
+}

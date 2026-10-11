@@ -17,7 +17,7 @@ function useFrameScale(): number {
   return scale;
 }
 
-export function Frame({ accent, children }: { accent: Rgb; children: ReactNode }) {
+export function Frame({ accent, scene, children }: { accent: Rgb; scene: ReactNode; children: ReactNode }) {
   const scale = useFrameScale();
   const [r, g, b] = accent;
   const vars = {
@@ -31,7 +31,14 @@ export function Frame({ accent, children }: { accent: Rgb; children: ReactNode }
         data-frame
         style={{ ...vars, transform: `translate(-50%, -50%) scale(${scale})` }}
       >
-        <div className="zone" data-zone="scene" style={rectStyle(ZONES.scene)} />
+        <div className="zone" data-zone="scene" style={rectStyle(ZONES.scene)}>
+          <div
+            className="scene-canvas"
+            style={{ left: -ZONES.scene.x, top: -ZONES.scene.y, width: FRAME.w, height: FRAME.h }}
+          >
+            {scene}
+          </div>
+        </div>
         <div className="scene-fade scene-fade--top" />
         <div className="scene-fade scene-fade--bottom" />
         {children}

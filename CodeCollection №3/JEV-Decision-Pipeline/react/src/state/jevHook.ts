@@ -14,11 +14,20 @@ declare global {
   }
 }
 
-/** Test-facing handle; `ready` flips once fonts are loaded and the first render has committed. */
+let sceneRendered = false;
+
+/** Called by the scene after a frame has drawn at the clock time; `ready` waits for it. */
+export function markSceneRendered(): void {
+  if (sceneRendered) return;
+  sceneRendered = true;
+  if (window.__jev) window.__jev.ready = true;
+}
+
+/** Test-facing handle; `ready` flips once the 3D scene has rendered at the requested time. */
 export function useJevHook(): void {
   useEffect(() => {
     const hook: JevHook = {
-      ready: false,
+      ready: sceneRendered,
       state: () => {
         const { t, paused } = useClock.getState();
         const tl = timeline(t);
@@ -26,8 +35,5 @@ export function useJevHook(): void {
       },
     };
     window.__jev = hook;
-    void document.fonts.ready.then(() => {
-      hook.ready = true;
-    });
   }, []);
 }

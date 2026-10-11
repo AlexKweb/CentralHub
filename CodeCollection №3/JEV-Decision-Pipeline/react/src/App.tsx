@@ -10,6 +10,7 @@ import { Frame } from './ui/Frame';
 import { Header } from './ui/Header';
 import { KpiRow } from './ui/KpiRow';
 import { Panels } from './ui/Panels';
+import { SceneCanvas } from './scene/SceneCanvas';
 import './ui/styles.css';
 
 const CASE_LIST = (casesJson as CasesDoc).cases;
@@ -21,7 +22,7 @@ export function App() {
   const t = useUiTime();
   const seed = useClock((s) => s.seed);
   return (
-    <Frame accent={accent(t, CASE_LIST)}>
+    <Frame accent={accent(t, CASE_LIST)} scene={<SceneCanvas t={t} cases={CASE_LIST} />}>
       <Header />
       <KpiRow t={t} seed={seed} cases={CASE_LIST} />
       <CaseHeader t={t} cases={CASE_LIST} />

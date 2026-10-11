@@ -75,6 +75,11 @@ body {
   position: absolute;
 }
 
+/* Full-frame canvas inside the scene zone; the zone rect itself stays as the layout marker. */
+.scene-canvas {
+  position: absolute;
+}
+
 .scene-fade {
   position: absolute;
   left: 0;
@@ -367,6 +372,10 @@ body {
 }
 .panel-title {
   text-transform: uppercase;
+}
+/* chief.py is a file name, so its title keeps lowercase. */
+.panel[data-zone='panel-chief'] .panel-title {
+  text-transform: none;
 }
 .panel-title::before {
   content: '';

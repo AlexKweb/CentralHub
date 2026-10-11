@@ -1,7 +1,8 @@
 import { addAfterEffect, useFrame, useThree } from '@react-three/fiber';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import { AdditiveBlending } from 'three';
 import type { PerspectiveCamera } from 'three';
-import { accent, active, cardPosition, timeline } from '../sim';
+import { accent, active, cardPosition, links, timeline } from '../sim';
 import type { Case, Column, Vec3 } from '../sim';
 import { fmtHundredths, hundredths } from '../sim/util';
 import { useClock } from '../state/store';
@@ -12,6 +13,7 @@ import type { CardView } from './cardView';
 import { CARD_PLANE, HEADER_PLANE, cardCenters, cardsDoc, headerPosition } from './layout';
 import { floorField, wallField } from './grid';
 import type { LineField } from './grid';
+import { linkField } from './links';
 import { drawCard, drawHeader, useCanvasTexture } from './textures';
 
 const CENTERS = cardCenters(cardsDoc.columns);
@@ -31,6 +33,7 @@ export function Scene({ t, cases }: { t: number; cases: readonly Case[] }) {
       <RenderProbe t={t} />
       <Lines field={WALL} />
       <Lines field={FLOOR} />
+      <Links />
       {cardsDoc.columns.map((column, ci) => (
         <group key={column.id}>
           <ColumnHeader column={column} position={headerPosition(ci)} />
@@ -91,6 +94,21 @@ function Lines({ field }: { field: LineField }) {
         <bufferAttribute attach="attributes-color" args={[field.colors, 3]} />
       </bufferGeometry>
       <lineBasicMaterial vertexColors />
+    </lineSegments>
+  );
+}
+
+/** Additive and drawn before the cards, so the cards cover the links they sit on. */
+function Links() {
+  const seed = useClock((s) => s.seed);
+  const field = useMemo(() => linkField(seed, links(seed, cardsDoc.columns), CENTERS), [seed]);
+  return (
+    <lineSegments renderOrder={-1}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[field.positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[field.colors, 3]} />
+      </bufferGeometry>
+      <lineBasicMaterial vertexColors transparent blending={AdditiveBlending} depthWrite={false} />
     </lineSegments>
   );
 }

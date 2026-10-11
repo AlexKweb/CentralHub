@@ -36,6 +36,7 @@ type fonts struct {
 	title, label, caption text.Face
 	value, unit, small    text.Face // KPI numbers (44 and 20 bold), 11 bold labels and buttons
 	badge, caseTitle      text.Face // 13 and 30 extra-bold
+	micro                 text.Face // 10 regular, chart gate label
 }
 
 func newFonts() (fonts, error) {
@@ -60,6 +61,7 @@ func newFonts() (fonts, error) {
 		small:     newFace(bold, 11),
 		badge:     newFace(extraBold, 13),
 		caseTitle: newFace(extraBold, 30),
+		micro:     newFace(regular, 10),
 	}, nil
 }
 
@@ -84,12 +86,6 @@ func newBackdrop() *ebiten.Image {
 		vector.FillRect(img, 0, float32(y), FrameWidth, 1, color.NRGBA{A: uint8(a * 255)}, false)
 	}
 	return img
-}
-
-// boxedZones lists the zones drawn as empty panels; header, KPI cards, case header, scene and footer are drawn separately.
-func boxedZones() []Rect {
-	z := Frame
-	return []Rect{z.Parallel, z.Confidence, z.UseCases, z.Chief, z.RunLog, z.Split, z.Guardrails}
 }
 
 // drawBox paints an empty panel: dark fill, 1 px #1E2636 border, rounded corners.

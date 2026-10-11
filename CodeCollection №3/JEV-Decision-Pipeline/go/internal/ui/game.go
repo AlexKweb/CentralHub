@@ -119,7 +119,7 @@ func (g *Game) Draw(*ebiten.Image) {
 	if g.canvas == nil {
 		g.canvas = ebiten.NewImage(FrameWidth, FrameHeight)
 		g.layer = ebiten.NewImage(FrameWidth, FrameHeight)
-		g.scene = newSceneLayer(g.cards, g.rig)
+		g.scene = newSceneLayer(g.cards, g.rig, g.seed)
 		g.backdrop = newBackdrop()
 		g.chrome = g.buildChrome()
 		g.logBuf = ebiten.NewImage(int(g.panelBody(Frame.RunLog).W), logWindowH)

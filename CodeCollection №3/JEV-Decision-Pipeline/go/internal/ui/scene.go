@@ -31,13 +31,18 @@ const (
 
 // sceneLayer is the 3D scene: the card layout, grid lines and the textures that persist between frames.
 type sceneLayer struct {
-	rig     camera.Rig
-	cards   []cardPlace
-	headers []headerPlace
-	grid    []segment
-	sprites map[string]*sprite
-	halo    *ebiten.Image
-	verts   []ebiten.Vertex
+	rig       camera.Rig
+	cards     []cardPlace
+	headers   []headerPlace
+	centers   map[string]scmath.Vec3
+	links     []linkPlace
+	grid      []segment
+	sprites   map[string]*sprite
+	halo      *ebiten.Image
+	white     *ebiten.Image
+	verts     []ebiten.Vertex
+	linkBatch triBatch
+	curvePts  []screenPt
 }
 
 type cardPlace struct {
@@ -65,8 +70,11 @@ type segment struct {
 	alpha float64
 }
 
-func newSceneLayer(doc sim.CardsDoc, rig camera.Rig) *sceneLayer {
-	s := &sceneLayer{rig: rig, sprites: make(map[string]*sprite), grid: gridSegments(), halo: haloTexture()}
+func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
+	s := &sceneLayer{
+		rig: rig, sprites: make(map[string]*sprite), centers: make(map[string]scmath.Vec3),
+		grid: gridSegments(), halo: haloTexture(), white: whiteTexture(),
+	}
 	for ci, col := range doc.Columns {
 		clr := hexColor(col.Color)
 		head := sim.CardPosition(ci, 0)
@@ -77,8 +85,13 @@ func newSceneLayer(doc sim.CardsDoc, rig camera.Rig) *sceneLayer {
 		})
 		for row, card := range col.Cards {
 			p := sim.CardPosition(ci, row)
-			s.cards = append(s.cards, cardPlace{id: card.ID, card: card, color: clr, center: scmath.Vec3{p[0], p[1], p[2]}})
+			c := scmath.Vec3{p[0], p[1], p[2]}
+			s.centers[card.ID] = c
+			s.cards = append(s.cards, cardPlace{id: card.ID, card: card, color: clr, center: c})
 		}
+	}
+	for i, l := range sim.Links(seed, doc.Columns) {
+		s.links = append(s.links, linkPlace{from: s.centers[l.From], to: s.centers[l.To], clr: linkStroke(l.Color, linkAlpha(seed, i))})
 	}
 	return s
 }
@@ -101,6 +114,7 @@ func (g *Game) drawScene(accent color.NRGBA) {
 
 	g.clipped(Frame.Scene, func() {
 		drawGrid(g.canvas, pr, s.grid)
+		g.drawLinks(pr)
 		type entry struct {
 			depth  float64
 			card   int // index into s.cards, or -1

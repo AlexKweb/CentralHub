@@ -32,6 +32,7 @@ type Game struct {
 	backdrop  *ebiten.Image
 	chrome    *ebiten.Image // static panel boxes and titles, painted once
 	logBuf    *ebiten.Image // clips the scrolling run log
+	layer     *ebiten.Image // scratch frame behind clipped regions, see clipped
 	fit       fit           // window mapping from the last DrawFinalScreen
 	ready     bool
 }
@@ -107,6 +108,7 @@ func (g *Game) cursorLogical() (float64, float64, bool) {
 func (g *Game) Draw(*ebiten.Image) {
 	if g.canvas == nil {
 		g.canvas = ebiten.NewImage(FrameWidth, FrameHeight)
+		g.layer = ebiten.NewImage(FrameWidth, FrameHeight)
 		g.backdrop = newBackdrop()
 		g.chrome = g.buildChrome()
 		g.logBuf = ebiten.NewImage(int(g.panelBody(Frame.RunLog).W), logWindowH)

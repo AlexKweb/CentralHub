@@ -2,6 +2,7 @@ package ui
 
 import (
 	"bytes"
+	"image"
 	"image/color"
 	"math"
 
@@ -86,6 +87,20 @@ func newBackdrop() *ebiten.Image {
 		vector.FillRect(img, 0, float32(y), FrameWidth, 1, color.NRGBA{A: uint8(a * 255)}, false)
 	}
 	return img
+}
+
+// clipped runs draw against the frame canvas, but only the part inside r reaches it: draw paints a transparent layer that is copied back through r.
+func (g *Game) clipped(r Rect, draw func()) {
+	frame := g.canvas
+	g.canvas = g.layer
+	g.layer.Clear()
+	draw()
+	g.canvas = frame
+	x0, y0 := int(math.Floor(r.X)), int(math.Floor(r.Y))
+	x1, y1 := int(math.Ceil(r.X+r.W)), int(math.Ceil(r.Y+r.H))
+	var op ebiten.DrawImageOptions
+	op.GeoM.Translate(float64(x0), float64(y0))
+	frame.DrawImage(g.layer.SubImage(image.Rect(x0, y0, x1, y1)).(*ebiten.Image), &op)
 }
 
 // drawBox paints an empty panel: dark fill, 1 px #1E2636 border, rounded corners.

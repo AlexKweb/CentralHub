@@ -55,13 +55,18 @@ func (g *Game) buildChrome() *ebiten.Image {
 }
 
 func (g *Game) drawBottomPanels(accent color.NRGBA) {
-	g.drawParallel(accent)
-	g.drawStream(accent)
-	g.drawUseCases(accent)
-	g.drawChief(accent)
-	g.drawRunLog(accent)
-	g.drawSplit(accent)
-	g.drawGuardrails(accent)
+	g.inPanel(Frame.Parallel, func() { g.drawParallel(accent) })
+	g.inPanel(Frame.Confidence, func() { g.drawStream(accent) })
+	g.inPanel(Frame.UseCases, func() { g.drawUseCases(accent) })
+	g.inPanel(Frame.Chief, func() { g.drawChief(accent) })
+	g.inPanel(Frame.RunLog, func() { g.drawRunLog(accent) })
+	g.inPanel(Frame.Split, func() { g.drawSplit(accent) })
+	g.inPanel(Frame.Guardrails, func() { g.drawGuardrails(accent) })
+}
+
+// inPanel clips a panel's contents to its inner rect (inside the border), as CSS overflow: hidden does on .panel.
+func (g *Game) inPanel(z Rect, draw func()) {
+	g.clipped(Rect{X: z.X + panelBorder, Y: z.Y + panelBorder, W: z.W - 2*panelBorder, H: z.H - 2*panelBorder}, draw)
 }
 
 // panelContent is the box inside a panel's border and padding.

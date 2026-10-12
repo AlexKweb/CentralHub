@@ -122,9 +122,10 @@ func projectCurve(pr scmath.Projector, c [4]scmath.Vec3, pts []screenPt) []scree
 	return pts
 }
 
-// linkAlpha is the seeded opacity of link i, in [0.25, 0.5).
+// linkAlpha is the seeded opacity of link i, in [0.10, 0.28). Kept low so the column-gap bundles do not saturate under bloom.
 func linkAlpha(seed uint32, i int) float64 {
-	return 0.25 + 0.25*float64(sim.Hash32(seed, chLinkAlpha, uint32(i)))/(1<<32)
+	h := float64(sim.Hash32(seed, chLinkAlpha, uint32(i))%1000) / 1000
+	return 0.10 + 0.18*h
 }
 
 // linkColor is the palette colour of a link; unknown names fall back to white.

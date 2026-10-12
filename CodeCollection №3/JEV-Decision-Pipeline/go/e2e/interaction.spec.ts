@@ -83,3 +83,12 @@ test('F toggles the post-effects without console errors', async ({ page }) => {
   await expect.poll(async () => (await state(page)).fx, SLOW).toBe(true);
   expect(problems, 'console errors').toEqual([]);
 });
+
+test('unpaused show advances to case 2 on its own (t 7.5 → 8.0)', async ({ page }) => {
+  const problems = await open(page, 'seed=1&t=7.5');
+  await expect.poll(async () => (await state(page)).case, SLOW).toBe(2);
+  const s = await state(page);
+  expect(s.stage).toBe('state');
+  expect(s.paused).toBe(false);
+  expect(problems, 'console errors').toEqual([]);
+});

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -83,4 +83,35 @@ test('fx=0 renders the plain scene with no console errors', async ({ page }) => 
   const state = await page.evaluate(() => (window as any).__jev.state());
   expect(state).toMatchObject({ case: 1, stage: 'code', paused: true });
   expect(problems, 'console errors').toEqual([]);
+});
+
+// Share of pixels that differ between two PNG screenshots, decoded in the page so no image library is needed.
+async function diffRatio(page: Page, a: Buffer, b: Buffer): Promise<number> {
+  return page.evaluate(async ([pa, pb]) => {
+    const pixels = async (b64: string) => {
+      const bmp = await createImageBitmap(await (await fetch(`data:image/png;base64,${b64}`)).blob());
+      const ctx = new OffscreenCanvas(bmp.width, bmp.height).getContext('2d')!;
+      ctx.drawImage(bmp, 0, 0);
+      return { w: bmp.width, h: bmp.height, data: ctx.getImageData(0, 0, bmp.width, bmp.height).data };
+    };
+    const x = await pixels(pa);
+    const y = await pixels(pb);
+    let n = 0;
+    for (let i = 0; i < x.data.length; i += 4) {
+      if (x.data[i] !== y.data[i] || x.data[i + 1] !== y.data[i + 1] || x.data[i + 2] !== y.data[i + 2] || x.data[i + 3] !== y.data[i + 3]) n++;
+    }
+    return n / (x.w * x.h);
+  }, [a.toString('base64'), b.toString('base64')]);
+}
+
+test('paused frame is a pure function of t: screenshots 1 s apart differ by < 0.1% of pixels', async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.goto('/?seed=1&paused=1&t=7.6');
+  await page.waitForFunction(() => (window as any).__jev?.ready === true, undefined, { timeout: 60_000 });
+
+  const first = await page.screenshot();
+  await page.waitForTimeout(1000);
+  const second = await page.screenshot();
+
+  expect(await diffRatio(page, first, second)).toBeLessThan(0.001);
 });

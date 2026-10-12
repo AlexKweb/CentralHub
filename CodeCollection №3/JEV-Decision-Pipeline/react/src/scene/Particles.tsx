@@ -7,7 +7,7 @@ import { useClock } from '../state/store';
 import { linkCurve } from './curves';
 import { RGB } from './links';
 import { cardCenters, cardsDoc } from './layout';
-import { LINK_PARTICLES, particleParams, towardWhite } from './particles';
+import { DUST_PARTICLES, LINK_PARTICLES, dustParams, particleParams, towardWhite } from './particles';
 
 const CENTERS = cardCenters(cardsDoc.columns);
 const WHITE_LINK = 0.4;
@@ -49,6 +49,24 @@ void main() {
 }
 `;
 
+/** Plain points with a pulsing alpha: aPulse holds base, amplitude and phase. */
+const POINT_VERTEX = /* glsl */ `
+attribute float aSize;
+attribute vec3 aColor;
+attribute vec3 aPulse;
+uniform float uTime;
+uniform float uPixelRatio;
+varying vec3 vColor;
+varying float vAlpha;
+
+void main() {
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  gl_PointSize = aSize * uPixelRatio;
+  vColor = aColor;
+  vAlpha = aPulse.x + aPulse.y * sin(1.7 * uTime + aPulse.z);
+}
+`;
+
 type Uniforms = Record<'uTime' | 'uPixelRatio', { value: number }>;
 
 /** Clock time and device pixel ratio for the particle shaders, refreshed every frame. */
@@ -84,6 +102,52 @@ function linkBuffers(seed: number, list: readonly Link[]): LinkBuffers {
     color.set([...rgb, sparkle ? SPARKLE_INTENSITY : INTENSITY], i * 4);
   }
   return { curve, params, color };
+}
+
+interface DustBuffers {
+  position: Float32Array;
+  size: Float32Array;
+  color: Float32Array;
+  pulse: Float32Array;
+}
+
+function dustBuffers(seed: number): DustBuffers {
+  const position = new Float32Array(DUST_PARTICLES * 3);
+  const size = new Float32Array(DUST_PARTICLES);
+  const color = new Float32Array(DUST_PARTICLES * 3).fill(1);
+  const pulse = new Float32Array(DUST_PARTICLES * 3);
+  for (let i = 0; i < DUST_PARTICLES; i++) {
+    const d = dustParams(seed, i);
+    position.set(d.position, i * 3);
+    size[i] = d.size;
+    pulse.set([0.25, 0.25, d.phase], i * 3);
+  }
+  return { position, size, color, pulse };
+}
+
+/** 300 static motes in the void; depth-tested so the cards occlude the ones behind them. */
+export function DustParticles() {
+  const seed = useClock((s) => s.seed);
+  const uniforms = useParticleUniforms();
+  const buffers = useMemo(() => dustBuffers(seed), [seed]);
+  return (
+    <points frustumCulled={false} renderOrder={1}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[buffers.position, 3]} />
+        <bufferAttribute attach="attributes-aSize" args={[buffers.size, 1]} />
+        <bufferAttribute attach="attributes-aColor" args={[buffers.color, 3]} />
+        <bufferAttribute attach="attributes-aPulse" args={[buffers.pulse, 3]} />
+      </bufferGeometry>
+      <shaderMaterial
+        vertexShader={POINT_VERTEX}
+        fragmentShader={FRAGMENT}
+        uniforms={uniforms}
+        transparent
+        depthWrite={false}
+        blending={AdditiveBlending}
+      />
+    </points>
+  );
 }
 
 /** 1500 particles riding the links; the cards drawn after them cover the ones underneath. */

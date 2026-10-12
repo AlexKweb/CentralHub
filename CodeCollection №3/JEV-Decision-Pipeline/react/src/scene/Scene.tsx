@@ -15,7 +15,7 @@ import { floorField, wallField } from './grid';
 import type { LineField } from './grid';
 import { linkField } from './links';
 import { ActivePath } from './ActivePath';
-import { LinkParticles } from './Particles';
+import { DustParticles, LinkParticles } from './Particles';
 import { drawCard, drawHeader, useCanvasTexture } from './textures';
 
 const CENTERS = cardCenters(cardsDoc.columns);
@@ -37,6 +37,7 @@ export function Scene({ t, cases }: { t: number; cases: readonly Case[] }) {
       <Lines field={FLOOR} />
       <Links />
       <LinkParticles />
+      <DustParticles />
       {cardsDoc.columns.map((column, ci) => (
         <group key={column.id}>
           <ColumnHeader column={column} position={headerPosition(ci)} />

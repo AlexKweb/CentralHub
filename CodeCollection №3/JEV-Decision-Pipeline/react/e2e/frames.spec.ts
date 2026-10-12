@@ -100,6 +100,7 @@ for (const frame of FRAMES) {
 
     expect(consoleErrors, 'console errors').toEqual([]);
     expect(foreignRequests, 'non-localhost requests').toEqual([]);
+    await expect(page).toHaveScreenshot(`react-${frame.id}.png`, { maxDiffPixelRatio: 0.02 });
 
     mkdirSync(REPORT_DIR, { recursive: true });
     await page.screenshot({ path: join(REPORT_DIR, `react-${frame.id}.png`) });

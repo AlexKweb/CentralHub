@@ -105,8 +105,33 @@ func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
 	return s
 }
 
-// drawScene paints the 3D layer into the scene zone: grid, links, the active path and their particles, then headers and cards back to front, the active particles and the ball on top.
-func (g *Game) drawScene(accent color.NRGBA) {
+// sceneEntry is a card or column header in the scene: card indexes s.cards and header s.headers, the other is -1.
+type sceneEntry struct {
+	depth  float64
+	card   int
+	header int
+}
+
+// sceneOrder lists the visible cards and headers from far to near.
+func (s *sceneLayer) sceneOrder(pr scmath.Projector) []sceneEntry {
+	var order []sceneEntry
+	for i, c := range s.cards {
+		if _, _, d, ok := pr.Project(c.center); ok {
+			order = append(order, sceneEntry{depth: d, card: i, header: -1})
+		}
+	}
+	for i, h := range s.headers {
+		if _, _, d, ok := pr.Project(h.center); ok {
+			order = append(order, sceneEntry{depth: d, card: -1, header: i})
+		}
+	}
+	sort.Slice(order, func(a, b int) bool { return order[a].depth > order[b].depth })
+	return order
+}
+
+// drawScene paints the 3D layer into the scene zone: grid, links and particles, then cards and headers back to front, then the active particles and the ball on top.
+// With dof, out-of-focus cards go through the blurred layer, which sits between the links and the sharp cards.
+func (g *Game) drawScene(accent color.NRGBA, dof bool) {
 	s := g.scene
 	pose := s.rig.Pose(g.t)
 	pr := scmath.NewProjector(pose.Position, pose.Target, pose.Up)
@@ -126,42 +151,65 @@ func (g *Game) drawScene(accent color.NRGBA) {
 	if act.Ball.Arrived {
 		flashID, flash = act.Ball.To, flashAmount(sim.Timeline(g.t).StageProgress)
 	}
-
-	g.clipped(Frame.Scene, func() {
+	draw := func(e sceneEntry) {
+		if e.card >= 0 {
+			c := s.cards[e.card]
+			f := 0.0
+			if c.id == flashID {
+				f = flash
+			}
+			g.drawCardPlace(pr, c, lit[c.id], accent, plates[c.id], live, f)
+		} else {
+			g.drawHeaderPlace(pr, s.headers[e.header])
+		}
+	}
+	background := func() {
 		drawGrid(g.canvas, pr, s.grid)
 		g.drawLinks(pr, act.Lit, accent)
 		g.drawParticles(pr, ref)
-		type entry struct {
-			depth  float64
-			card   int // index into s.cards, or -1
-			header int // index into s.headers, or -1
-		}
-		var order []entry
-		for i, c := range s.cards {
-			if _, _, d, ok := pr.Project(c.center); ok {
-				order = append(order, entry{depth: d, card: i, header: -1})
-			}
-		}
-		for i, h := range s.headers {
-			if _, _, d, ok := pr.Project(h.center); ok {
-				order = append(order, entry{depth: d, card: -1, header: i})
-			}
-		}
-		sort.Slice(order, func(a, b int) bool { return order[a].depth > order[b].depth })
-		for _, e := range order {
-			if e.card >= 0 {
-				c := s.cards[e.card]
-				f := 0.0
-				if c.id == flashID {
-					f = flash
-				}
-				g.drawCardPlace(pr, c, lit[c.id], accent, plates[c.id], live, f)
-			} else {
-				g.drawHeaderPlace(pr, s.headers[e.header])
-			}
-		}
+	}
+	top := func() {
 		g.drawActiveParticles(pr, act.Lit, accent, ref)
 		g.drawBall(pr, act.Ball, accent)
+	}
+	order := s.sceneOrder(pr)
+	if !dof {
+		g.clipped(Frame.Scene, func() {
+			background()
+			for _, e := range order {
+				draw(e)
+			}
+			top()
+		})
+		return
+	}
+
+	var far, sharp []sceneEntry
+	for _, e := range order {
+		active := e.card >= 0 && s.cards[e.card].id == act.Ball.To
+		if outOfFocus(e.depth, ref, active) {
+			far = append(far, e)
+		} else {
+			sharp = append(sharp, e)
+		}
+	}
+	g.clipped(Frame.Scene, background)
+	b := g.post
+	b.far.Clear()
+	g.into(b.far, func() {
+		g.clipped(Frame.Scene, func() {
+			for _, e := range far {
+				draw(e)
+			}
+		})
+	})
+	b.blurFar()
+	g.clipped(Frame.Scene, func() { b.addFar(g.canvas) })
+	g.clipped(Frame.Scene, func() {
+		for _, e := range sharp {
+			draw(e)
+		}
+		top()
 	})
 }
 

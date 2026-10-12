@@ -37,6 +37,7 @@ type Game struct {
 	chrome    *ebiten.Image // static panel boxes and titles, painted once
 	logBuf    *ebiten.Image // clips the scrolling run log
 	layer     *ebiten.Image // scratch frame behind clipped regions, see clipped
+	post      *postBuffers  // offscreen frames of the post-effects, see post.go
 	fit       fit           // window mapping from the last DrawFinalScreen
 	ready     bool
 }
@@ -78,10 +79,13 @@ func New(st params.State, cases []sim.Case) (*Game, error) {
 	}, nil
 }
 
-// Update advances the clock at 60 Hz unless paused; Space toggles pause, ←/→ step cases, and a click on a stage button or use-case tile jumps to it.
+// Update advances the clock at 60 Hz unless paused; Space toggles pause, F toggles the post-effects, ←/→ step cases, and a click on a stage button or use-case tile jumps to it.
 func (g *Game) Update() error {
 	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
 		g.paused = !g.paused
+	}
+	if inpututil.IsKeyJustPressed(ebiten.KeyF) {
+		g.fx = !g.fx
 	}
 	if inpututil.IsKeyJustPressed(ebiten.KeyArrowLeft) {
 		g.t = sim.PrevCase(g.t)
@@ -119,15 +123,25 @@ func (g *Game) Draw(*ebiten.Image) {
 	if g.canvas == nil {
 		g.canvas = ebiten.NewImage(FrameWidth, FrameHeight)
 		g.layer = ebiten.NewImage(FrameWidth, FrameHeight)
+		g.post = newPostBuffers()
 		g.scene = newSceneLayer(g.cards, g.rig, g.seed)
 		g.backdrop = newBackdrop()
 		g.chrome = g.buildChrome()
 		g.logBuf = ebiten.NewImage(int(g.panelBody(Frame.RunLog).W), logWindowH)
 	}
-	g.canvas.DrawImage(g.backdrop, nil)
-	g.canvas.DrawImage(g.chrome, nil)
 	accent := accentColor(g.t, g.cases)
-	g.drawScene(accent)
+	if g.fx {
+		g.into(g.post.world, func() {
+			g.canvas.DrawImage(g.backdrop, nil)
+			g.drawScene(accent, true)
+		})
+		g.post.bloom()
+		g.post.vignette(g.canvas, g.t)
+	} else {
+		g.canvas.DrawImage(g.backdrop, nil)
+		g.drawScene(accent, false)
+	}
+	g.canvas.DrawImage(g.chrome, nil)
 	g.drawHeader(accent)
 	g.drawKPIs(accent)
 	g.drawCaseHeader(accent)

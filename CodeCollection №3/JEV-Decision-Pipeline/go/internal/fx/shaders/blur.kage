@@ -1,0 +1,19 @@
+//kage:unit pixels
+
+package main
+
+// Separable 9-tap Gaussian (sigma 2 taps). Step is the tap spacing in source pixels: (s, 0) for the horizontal pass, (0, s) for the vertical.
+
+var Step vec2
+
+func Fragment(dstPos vec4, src0Pos vec2, color vec4) vec4 {
+	var sum vec4
+	var total float
+	for i := -4; i <= 4; i++ {
+		k := float(i)
+		w := exp(-k * k / 8.0)
+		sum += w * imageSrc0At(src0Pos+Step*k)
+		total += w
+	}
+	return sum / total
+}

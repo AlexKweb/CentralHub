@@ -69,3 +69,18 @@ for (const f of frames) {
     expect(external, 'non-localhost requests').toEqual([]);
   });
 }
+
+test('fx=0 renders the plain scene with no console errors', async ({ page }) => {
+  const problems: string[] = [];
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') problems.push(msg.text());
+  });
+  page.on('pageerror', (err) => problems.push(err.message));
+
+  await page.goto('/?seed=1&paused=1&t=7.6&fx=0');
+  await page.waitForFunction(() => (window as any).__jev?.ready === true, undefined, { timeout: 60_000 });
+
+  const state = await page.evaluate(() => (window as any).__jev.state());
+  expect(state).toMatchObject({ case: 1, stage: 'code', paused: true });
+  expect(problems, 'console errors').toEqual([]);
+});

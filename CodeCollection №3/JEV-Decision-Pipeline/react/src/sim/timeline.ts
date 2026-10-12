@@ -1,4 +1,4 @@
-import { CASES, CASE_SECONDS, CYCLE_SECONDS, STAGE_STARTS, STAGES, STAGE_DURATIONS } from './constants';
+import { CASES, CASE_SECONDS, CYCLE_SECONDS, STAGE_EPS, STAGE_STARTS, STAGES, STAGE_DURATIONS } from './constants';
 import type { Timeline } from './types';
 import { clamp, norm } from './util';
 
@@ -10,9 +10,9 @@ export function timeline(t: number): Timeline {
   const local = Math.max(0, inCycle - caseIndex * CASE_SECONDS);
   let stageIndex = 0;
   for (let i = 0; i < STAGES.length; i++) {
-    if (STAGE_STARTS[i] <= local) stageIndex = i;
+    if (STAGE_STARTS[i] <= local + STAGE_EPS) stageIndex = i;
   }
-  const stageElapsed = local - STAGE_STARTS[stageIndex];
+  const stageElapsed = Math.max(0, local - STAGE_STARTS[stageIndex]);
   return {
     cycle,
     caseIndex,

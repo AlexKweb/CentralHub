@@ -3,6 +3,8 @@ import type { CaseType } from './types';
 export const STAGES = ['state', 'ask', 'jev', 'gate', 'code'] as const;
 export const STAGE_STARTS: readonly number[] = [0, 1.2, 2.8, 4.4, 6.0];
 export const STAGE_DURATIONS: readonly number[] = [1.2, 1.6, 1.6, 1.6, 2.0];
+/** Float slack at stage boundaries: jumpToStage can land a hair below its boundary. */
+export const STAGE_EPS = 1e-9;
 
 export const CASES = 12;
 export const CASE_SECONDS = 8;

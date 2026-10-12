@@ -18,6 +18,7 @@ type Snapshot struct {
 	Stage  string
 	T      float64
 	Paused bool
+	FX     bool
 }
 
 // Game advances the show clock and paints the logical 1240×1568 frame.
@@ -170,7 +171,16 @@ func (g *Game) LayoutF(float64, float64) (float64, float64) { return FrameWidth,
 // Snapshot reports the case number, stage and clock for the browser hook.
 func (g *Game) Snapshot() Snapshot {
 	tl := sim.Timeline(g.t)
-	return Snapshot{Case: tl.CaseNumber, Stage: tl.Stage, T: g.t, Paused: g.paused}
+	return Snapshot{Case: tl.CaseNumber, Stage: tl.Stage, T: g.t, Paused: g.paused, FX: g.fx}
+}
+
+// Targets returns the clickable boxes in frame coordinates: the use-case tiles and the stage buttons.
+func (g *Game) Targets() (tiles [sim.NumCases]Rect, stages [5]Rect) {
+	body := g.panelBody(Frame.UseCases)
+	for i := range tiles {
+		tiles[i] = tileRect(body, i)
+	}
+	return tiles, stageButtons(Frame.Case)
 }
 
 // Ready reports whether a frame has been drawn.

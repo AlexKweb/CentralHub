@@ -3,7 +3,7 @@ GO ?= go
 
 WASM_EXEC := $(shell $(GO) env GOROOT)/lib/wasm/wasm_exec.js
 
-.PHONY: generate test check-assets wasm serve build e2e
+.PHONY: generate test run check-assets wasm serve build e2e
 
 # Copies ../shared into internal/assets/shared (go:embed cannot reach the parent directory).
 generate:
@@ -12,6 +12,10 @@ generate:
 test:
 	$(GO) vet ./...
 	$(GO) test ./...
+
+# Desktop window; needs a display.
+run:
+	$(GO) run ./cmd/jev
 
 # Fails if the copy differs from ../shared. Writes nothing.
 check-assets:

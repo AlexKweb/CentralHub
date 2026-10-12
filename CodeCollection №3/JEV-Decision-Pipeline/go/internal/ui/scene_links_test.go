@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	scmath "jev/internal/scene/math"
+	"jev/internal/sim"
 )
 
 func TestLinkCurveEndsOnCardEdgesWithHorizontalTangents(t *testing.T) {
@@ -27,10 +28,16 @@ func TestLinkCurveEndsOnCardEdgesWithHorizontalTangents(t *testing.T) {
 	}
 }
 
-func TestLinkAlphaStaysInRange(t *testing.T) {
+func TestLinkAlphaFollowsHashRuleAndStaysInRange(t *testing.T) {
 	for i := 0; i < 2000; i++ {
-		if a := linkAlpha(0x5EED, i); a < 0.25 || a >= 0.5 {
-			t.Fatalf("link %d alpha %v outside [0.25, 0.5)", i, a)
+		a := linkAlpha(0x5EED, i)
+		if a < 0.10 || a >= 0.28 {
+			t.Fatalf("link %d alpha %v outside [0.10, 0.28)", i, a)
+		}
+		h := float64(sim.Hash32(0x5EED, 9, uint32(i))%1000) / 1000
+		want := 0.10 + 0.18*h
+		if a != want {
+			t.Fatalf("link %d alpha %v, want %v from Hash32(seed, 9, i) %% 1000", i, a, want)
 		}
 	}
 }

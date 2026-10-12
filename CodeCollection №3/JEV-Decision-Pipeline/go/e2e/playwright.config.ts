@@ -1,7 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testMatch: 'frames.spec.ts',
+  testMatch: '*.spec.ts',
   reporter: 'list',
   workers: 1,
   use: {

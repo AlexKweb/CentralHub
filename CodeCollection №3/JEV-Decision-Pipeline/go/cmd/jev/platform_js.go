@@ -31,15 +31,15 @@ func installHook(g *ui.Game) {
 	ready := js.FuncOf(func(js.Value, []js.Value) any { return g.Ready() })
 	object.Call("defineProperty", hook, "ready", map[string]any{"get": ready.Value})
 	hook.Set("state", js.FuncOf(func(js.Value, []js.Value) any { return stateObject(g.Snapshot()) }).Value)
-	hook.Set("layout", js.FuncOf(func(js.Value, []js.Value) any { return layoutObject() }).Value)
+	hook.Set("layout", js.FuncOf(func(js.Value, []js.Value) any { return layoutObject(g) }).Value)
 	js.Global().Set("__jev", hook)
 }
 
 func stateObject(s ui.Snapshot) map[string]any {
-	return map[string]any{"case": s.Case, "stage": s.Stage, "t": s.T, "paused": s.Paused}
+	return map[string]any{"case": s.Case, "stage": s.Stage, "t": s.T, "paused": s.Paused, "fx": s.FX}
 }
 
-func layoutObject() map[string]any {
+func layoutObject(g *ui.Game) map[string]any {
 	z := ui.Frame
 	out := map[string]any{
 		"header":     rectObject(z.Header),
@@ -56,6 +56,13 @@ func layoutObject() map[string]any {
 	}
 	for i, k := range z.KPIs {
 		out[fmt.Sprintf("kpi%d", i)] = rectObject(k)
+	}
+	tiles, stages := g.Targets()
+	for i, r := range tiles {
+		out[fmt.Sprintf("tile%d", i)] = rectObject(r)
+	}
+	for i, r := range stages {
+		out[fmt.Sprintf("stage%d", i)] = rectObject(r)
 	}
 	return out
 }

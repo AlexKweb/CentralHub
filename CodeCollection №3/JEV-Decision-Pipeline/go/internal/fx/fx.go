@@ -14,6 +14,7 @@ var sources embed.FS
 var (
 	Threshold = mustCompile("threshold.kage")
 	Blur      = mustCompile("blur.kage")
+	Vignette  = mustCompile("vignette.kage")
 )
 
 func mustCompile(name string) *ebiten.Shader {

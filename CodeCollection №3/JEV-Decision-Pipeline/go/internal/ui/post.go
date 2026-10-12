@@ -24,6 +24,15 @@ const (
 	dofStep = 1.5 // tap spacing in half-size pixels
 )
 
+// Vignette and grain. grainRate is the grain refresh per second; grainWrap keeps the hash argument small in float32.
+const (
+	vignetteOffset   = 0.3
+	vignetteDarkness = 0.6
+	grainAmp         = 0.04
+	grainRate        = 24
+	grainWrap        = 4096
+)
+
 // postBuffers are the offscreen frames the effects run through. The logical frame never changes size, so they are allocated once.
 type postBuffers struct {
 	world     *ebiten.Image // backdrop and scene, the input of every effect
@@ -78,8 +87,11 @@ func (p *postBuffers) addFar(dst *ebiten.Image) {
 
 // bloom adds the glow of the bright parts of world onto world.
 func (p *postBuffers) bloom() {
-	b := p.bright.Bounds()
-	p.bright.DrawRectShader(b.Dx(), b.Dy(), fx.Threshold, &ebiten.DrawRectShaderOptions{
+	// The source must match the rectangle's size, so the full-size rectangle is scaled down into the quarter-size target.
+	var down ebiten.GeoM
+	down.Scale(1.0/bloomDiv, 1.0/bloomDiv)
+	p.bright.DrawRectShader(FrameWidth, FrameHeight, fx.Threshold, &ebiten.DrawRectShaderOptions{
+		GeoM:     down,
 		Blend:    ebiten.BlendCopy,
 		Uniforms: map[string]any{"Threshold": float32(bloomThreshold), "Knee": float32(bloomKnee)},
 		Images:   [4]*ebiten.Image{p.world},
@@ -91,6 +103,20 @@ func (p *postBuffers) bloom() {
 	op.Blend = ebiten.BlendLighter
 	op.ColorScale.Scale(bloomGain, bloomGain, bloomGain, 1)
 	p.world.DrawImage(p.bright, &op)
+}
+
+// vignette writes the scene in world to dst with the corners darkened and grain added.
+func (p *postBuffers) vignette(dst *ebiten.Image, t float64) {
+	dst.DrawRectShader(FrameWidth, FrameHeight, fx.Vignette, &ebiten.DrawRectShaderOptions{
+		Blend: ebiten.BlendCopy,
+		Uniforms: map[string]any{
+			"Offset":   float32(vignetteOffset),
+			"Darkness": float32(vignetteDarkness),
+			"GrainAmp": float32(grainAmp),
+			"Seed":     float32(math.Mod(math.Floor(t*grainRate), grainWrap)),
+		},
+		Images: [4]*ebiten.Image{p.world},
+	})
 }
 
 // gaussian runs two iterations of the separable blur over buf, ping-ponging through tmp of the same size; step is the tap spacing in pixels.

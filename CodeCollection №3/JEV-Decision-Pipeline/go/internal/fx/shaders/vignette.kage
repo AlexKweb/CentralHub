@@ -1,0 +1,22 @@
+//kage:unit pixels
+
+package main
+
+// Vignette falls from 1 at Offset of the way to the corners down to 1 - Darkness at the corners.
+// Grain is zero-mean per-pixel noise, GrainAmp peak to peak; Seed changes it once per grain frame.
+
+var Offset float
+var Darkness float
+var GrainAmp float
+var Seed float
+
+func Fragment(dstPos vec4, src0Pos vec2, color vec4) vec4 {
+	uv := dstPos.xy / imageDstSize()
+	r := length((uv-0.5)*2.0) / 1.41421356
+	v := 1.0 - Darkness*smoothstep(Offset, 1.0, r)
+	c := imageSrc0At(src0Pos).rgb * v
+	p := floor(dstPos.xy) + vec2(Seed*17.0, Seed*31.0)
+	h := fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453)
+	c += (h - 0.5) * GrainAmp
+	return vec4(clamp(c, 0.0, 1.0), 1.0)
+}

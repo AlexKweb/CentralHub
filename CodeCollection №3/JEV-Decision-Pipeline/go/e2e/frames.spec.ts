@@ -30,6 +30,7 @@ const spec: Record<string, { top: number; bottom: number; left?: number; right?:
 
 for (const f of frames) {
   test(`${f.id}: t=${f.t} shows case ${f.caseNo} ${f.stage}`, async ({ page }) => {
+    test.setTimeout(120_000);
     const problems: string[] = [];
     const external: string[] = [];
     page.on('console', (msg) => {
@@ -64,6 +65,7 @@ for (const f of frames) {
 
     fs.mkdirSync(path.join(__dirname, 'report'), { recursive: true });
     await page.screenshot({ path: path.join(__dirname, 'report', `go-${f.id}.png`) });
+    await expect(page).toHaveScreenshot(`go-${f.id}.png`, { maxDiffPixelRatio: 0.02, timeout: 60_000 });
 
     expect(problems, 'console errors').toEqual([]);
     expect(external, 'non-localhost requests').toEqual([]);

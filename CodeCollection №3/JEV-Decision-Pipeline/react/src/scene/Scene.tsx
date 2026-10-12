@@ -60,7 +60,7 @@ export function Scene({ t, cases }: { t: number; cases: readonly Case[] }) {
       ))}
       <ActivePath t={t} cases={cases} />
       <ActiveParticles cases={cases} />
-      <PostFx />
+      <PostFx cases={cases} />
     </>
   );
 }

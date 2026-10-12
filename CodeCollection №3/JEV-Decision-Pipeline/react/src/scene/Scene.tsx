@@ -15,7 +15,7 @@ import { floorField, wallField } from './grid';
 import type { LineField } from './grid';
 import { linkField } from './links';
 import { ActivePath } from './ActivePath';
-import { DustParticles, LinkParticles } from './Particles';
+import { ActiveParticles, DustParticles, LinkParticles } from './Particles';
 import { drawCard, drawHeader, useCanvasTexture } from './textures';
 
 const CENTERS = cardCenters(cardsDoc.columns);
@@ -58,6 +58,7 @@ export function Scene({ t, cases }: { t: number; cases: readonly Case[] }) {
         </group>
       ))}
       <ActivePath t={t} cases={cases} />
+      <ActiveParticles cases={cases} />
     </>
   );
 }

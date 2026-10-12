@@ -1,16 +1,28 @@
 import { useFrame } from '@react-three/fiber';
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { AdditiveBlending } from 'three';
-import { links } from '../sim';
-import type { Link, Vec3 } from '../sim';
+import type { BufferGeometry } from 'three';
+import { accent, links } from '../sim';
+import type { Case, Link, Vec3 } from '../sim';
 import { useClock } from '../state/store';
 import { linkCurve } from './curves';
 import { RGB } from './links';
 import { cardCenters, cardsDoc } from './layout';
-import { DUST_PARTICLES, LINK_PARTICLES, dustParams, particleParams, towardWhite } from './particles';
+import {
+  ACTIVE_PARTICLES,
+  DUST_PARTICLES,
+  LINK_PARTICLES,
+  activeParticleAt,
+  activeSize,
+  dustParams,
+  particleParams,
+  towardWhite,
+} from './particles';
+import { routeView } from './route';
 
 const CENTERS = cardCenters(cardsDoc.columns);
 const WHITE_LINK = 0.4;
+const WHITE_ACTIVE = 0.3;
 const INTENSITY = 0.6;
 const SPARKLE_INTENSITY = 1;
 
@@ -133,6 +145,71 @@ export function DustParticles() {
   return (
     <points frustumCulled={false} renderOrder={1}>
       <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[buffers.position, 3]} />
+        <bufferAttribute attach="attributes-aSize" args={[buffers.size, 1]} />
+        <bufferAttribute attach="attributes-aColor" args={[buffers.color, 3]} />
+        <bufferAttribute attach="attributes-aPulse" args={[buffers.pulse, 3]} />
+      </bufferGeometry>
+      <shaderMaterial
+        vertexShader={POINT_VERTEX}
+        fragmentShader={FRAGMENT}
+        uniforms={uniforms}
+        transparent
+        depthWrite={false}
+        blending={AdditiveBlending}
+      />
+    </points>
+  );
+}
+
+interface ActiveBuffers {
+  position: Float32Array;
+  size: Float32Array;
+  color: Float32Array;
+  pulse: Float32Array;
+}
+
+function activeBuffers(seed: number): ActiveBuffers {
+  const position = new Float32Array(ACTIVE_PARTICLES * 3);
+  const size = new Float32Array(ACTIVE_PARTICLES);
+  const color = new Float32Array(ACTIVE_PARTICLES * 3);
+  const pulse = new Float32Array(ACTIVE_PARTICLES * 3);
+  for (let k = 0; k < ACTIVE_PARTICLES; k++) {
+    size[k] = activeSize(seed, k);
+    pulse.set([1, 0, 0], k * 3);
+  }
+  return { position, size, color, pulse };
+}
+
+/** Bright accent particles along the lit ribbons; positions follow the clock every frame, like the ball. */
+export function ActiveParticles({ cases }: { cases: readonly Case[] }) {
+  const seed = useClock((s) => s.seed);
+  const uniforms = useParticleUniforms();
+  const geometry = useRef<BufferGeometry>(null);
+  const buffers = useMemo(() => activeBuffers(seed), [seed]);
+
+  useFrame(() => {
+    const t = useClock.getState().t;
+    const ribbons = routeView(t, cases, CENTERS).pairs.map(([from, to]) =>
+      linkCurve(CENTERS.get(from) as Vec3, CENTERS.get(to) as Vec3),
+    );
+    const [r, g, b] = accent(t, cases);
+    const rgb = towardWhite([r / 255, g / 255, b / 255], WHITE_ACTIVE);
+    for (let k = 0; k < ACTIVE_PARTICLES; k++) {
+      const at = activeParticleAt(ribbons, k, t);
+      if (at) buffers.position.set(at, k * 3);
+      buffers.color.set(rgb, k * 3);
+    }
+    const geo = geometry.current;
+    if (!geo) return;
+    geo.setDrawRange(0, ribbons.length > 0 ? ACTIVE_PARTICLES : 0);
+    geo.attributes.position.needsUpdate = true;
+    geo.attributes.aColor.needsUpdate = true;
+  });
+
+  return (
+    <points frustumCulled={false} renderOrder={3}>
+      <bufferGeometry ref={geometry}>
         <bufferAttribute attach="attributes-position" args={[buffers.position, 3]} />
         <bufferAttribute attach="attributes-aSize" args={[buffers.size, 1]} />
         <bufferAttribute attach="attributes-aColor" args={[buffers.color, 3]} />

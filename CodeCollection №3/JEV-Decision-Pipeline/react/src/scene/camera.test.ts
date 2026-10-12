@@ -3,7 +3,7 @@ import { PerspectiveCamera, Vector3 } from 'three';
 import casesJson from '@shared/cases.json';
 import { CASES, CASE_SECONDS, STAGES, STAGE_STARTS } from '../sim';
 import type { CasesDoc, Vec3 } from '../sim';
-import { STAGE_CAMERA, blendedFrame, cameraPose, viewOffset } from './camera';
+import { STAGE_CAMERA, blendedFrame, cameraPose, poseOf, viewOffset } from './camera';
 import type { CameraPose } from './camera';
 import { cardCenters, cardsDoc } from './layout';
 
@@ -11,11 +11,11 @@ const cases = (casesJson as CasesDoc).cases;
 const centers = cardCenters(cardsDoc.columns);
 const DEG = Math.PI / 180;
 
-/** Stage target: half the card's x, the card's y, z = 0. */
+/** Stage target: half the card's x, the card's y minus 1.5 (SPEC §6.4), z = 0. */
 function targetOf(id: string): Vec3 {
   const v = centers.get(id);
   if (!v) throw new Error(`no centre for ${id}`);
-  return [0.5 * v[0], v[1], 0];
+  return [0.5 * v[0], v[1] - 1.5, 0];
 }
 
 function expectClose(actual: Vec3, expected: Vec3): void {
@@ -60,6 +60,13 @@ describe('cameraPose', () => {
         expect(settled.distance).toBe(STAGE_CAMERA[stage].distance);
       }
     });
+  });
+
+  it('places the camera above the target for the negative pitch of STATE (SPEC §6.4 sign)', () => {
+    const pose = poseOf(blendedFrame(STAGE_STARTS[0] + 1, cases, centers));
+    const expected = STAGE_CAMERA.state.distance * -Math.sin(STAGE_CAMERA.state.pitch * DEG);
+    expect(pose.position[1] - pose.target[1]).toBeCloseTo(expected, 9);
+    expect(expected).toBeGreaterThan(0);
   });
 
   it('projects the target onto the scene zone centre of a 1240×1568 frame', () => {

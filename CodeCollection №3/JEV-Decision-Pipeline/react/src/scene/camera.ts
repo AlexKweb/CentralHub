@@ -6,6 +6,8 @@ const DEG = Math.PI / 180;
 const BLEND_SECONDS = 0.9;
 const SWAY_YAW_DEG = 1.5;
 const SWAY_PITCH_DEG = 0.8;
+/** Drops the stage target below the card so the card sits above the scene centre (SPEC §6.4). */
+const TARGET_DROP = 1.5;
 /** The target projects to 721 of 1568 px: the scene zone centre. */
 const FOCUS_Y = 721 / 1568;
 
@@ -33,13 +35,13 @@ export interface CameraFrame {
   distance: number;
 }
 
-/** The stage target sits halfway between the card and the origin in x, so the rig frames the card pair. */
+/** Halfway to the origin in x frames the card pair; the 1.5 drop lifts the active card above the scene centre. */
 function stageFrame(cardId: string, stage: StageName, centers: ReadonlyMap<string, Vec3>): CameraFrame {
   const c = centers.get(cardId);
   if (!c) throw new Error(`camera target: unknown card ${cardId}`);
   const p = STAGE_CAMERA[stage];
   return {
-    target: [0.5 * c[0], c[1], 0],
+    target: [0.5 * c[0], c[1] - TARGET_DROP, 0],
     yaw: p.yaw * DEG,
     pitch: p.pitch * DEG,
     roll: p.roll * DEG,

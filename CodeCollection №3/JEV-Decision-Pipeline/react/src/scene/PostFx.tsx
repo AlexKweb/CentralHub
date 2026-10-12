@@ -4,6 +4,7 @@ import { useMemo, useRef } from 'react';
 import { Vector3 } from 'three';
 import type { DepthOfFieldEffect } from 'postprocessing';
 import type { Case } from '../sim';
+import { markComposedFrame } from '../state/jevHook';
 import { useClock } from '../state/store';
 import { cameraPose } from './camera';
 import { cardCenters, cardsDoc } from './layout';
@@ -26,6 +27,8 @@ function Stack({ cases }: { cases: readonly Case[] }) {
     focus.set(...cameraPose(useClock.getState().t, cases, CENTERS).target);
     if (dof.current?.target) dof.current.target.copy(focus);
   });
+  // Priority 2 runs after the composer (priority 1) has drawn this frame.
+  useFrame(() => markComposedFrame(), 2);
 
   return (
     <EffectComposer>

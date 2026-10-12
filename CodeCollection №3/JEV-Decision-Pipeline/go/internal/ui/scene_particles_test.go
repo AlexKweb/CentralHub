@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"math"
 	"testing"
 
 	scmath "jev/internal/scene/math"
@@ -31,22 +32,50 @@ func TestParticleParamsFollowSpecDraws(t *testing.T) {
 	}
 }
 
-func TestLinkParticleBatchReusesBuffers(t *testing.T) {
+func TestDustParamsFollowSpecDrawsAndStayInTheBox(t *testing.T) {
+	const seed = 0x5EED
+	for i := 0; i < dustParticleN; i++ {
+		r := sim.Mulberry32(sim.Hash32(seed, 10, uint32(i)))
+		d := DustParams(seed, i)
+		if want := -9 + 18*r(); d.Pos[0] != want {
+			t.Fatalf("speck %d x %v, want %v", i, d.Pos[0], want)
+		}
+		if want := -19 + 22*r(); d.Pos[1] != want {
+			t.Fatalf("speck %d y %v, want %v", i, d.Pos[1], want)
+		}
+		if want := -0.4 + 2*r(); d.Pos[2] != want {
+			t.Fatalf("speck %d z %v, want %v", i, d.Pos[2], want)
+		}
+		if want := 2 * math.Pi * r(); d.Phi != want {
+			t.Fatalf("speck %d phase %v, want %v", i, d.Phi, want)
+		}
+		if d.Size < 1.5 || d.Size >= 2.5 {
+			t.Fatalf("speck %d size %v outside [1.5, 2.5)", i, d.Size)
+		}
+		if a := dustAlpha(d, 3.7); a < 0 || a > 0.5 {
+			t.Fatalf("speck %d alpha %v outside [0, 0.5]", i, a)
+		}
+	}
+}
+
+func TestParticleBatchReusesBuffers(t *testing.T) {
 	const seed = 0x5EED
 	links := []linkPlace{
 		{from: scmath.Vec3{-3, 0, 0}, to: scmath.Vec3{3, 0, 0}},
 		{from: scmath.Vec3{-3, 1, 0}, to: scmath.Vec3{3, -1, 0}},
 	}
 	parts := newLinkParticles(seed, []sim.Link{{From: "a", To: "b", Color: "pink"}, {From: "a", To: "c", Color: "cyan"}})
+	dust := newDust(seed)
 	pr := scmath.NewProjector(scmath.Vec3{0, 0, 30}, scmath.Vec3{}, scmath.Vec3{0, 1, 0})
 	b := &triBatch{}
 	fill := func(tt float64) {
 		b.reset()
 		appendLinkParticles(b, pr, parts, links, tt, 30)
+		appendDust(b, pr, dust, tt, 30)
 	}
 	fill(0)
-	if len(b.idx) != linkParticleN*6 {
-		t.Fatalf("%d indices, want %d", len(b.idx), linkParticleN*6)
+	if want := (linkParticleN + dustParticleN) * 6; len(b.idx) != want {
+		t.Fatalf("%d indices, want %d", len(b.idx), want)
 	}
 	if allocs := testing.AllocsPerRun(10, func() { fill(1.5) }); allocs != 0 {
 		t.Fatalf("%v allocations per frame", allocs)

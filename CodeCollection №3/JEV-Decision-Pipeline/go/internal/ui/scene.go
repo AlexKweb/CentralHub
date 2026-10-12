@@ -46,6 +46,7 @@ type sceneLayer struct {
 	ballTex   *ebiten.Image
 	ballBatch triBatch
 	parts     []linkParticle
+	dust      []Dust
 	partTex   *ebiten.Image
 	partBatch triBatch
 }
@@ -100,6 +101,7 @@ func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
 		s.links = append(s.links, linkPlace{from: s.centers[l.From], to: s.centers[l.To], clr: linkStroke(l.Color, linkAlpha(seed, i))})
 	}
 	s.parts = newLinkParticles(seed, links)
+	s.dust = newDust(seed)
 	return s
 }
 

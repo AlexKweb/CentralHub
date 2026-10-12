@@ -11,7 +11,9 @@ import (
 // Particles (SPEC §6.3). Every position is a pure function of the clock and the seed, so the React variant can follow the same rule.
 const (
 	linkParticleN = 1500
+	dustParticleN = 300
 	chParticle    = 9 // sim.Hash32 channel of link particles, as the spec's rule names it; linkAlpha shares it
+	chDust        = 10
 	sparkleChance = 0.15
 	particleTexN  = 16
 	particleWhite = 0.4 // link particles lean this far towards white
@@ -59,6 +61,34 @@ func newLinkParticles(seed uint32, links []sim.Link) []linkParticle {
 	return out
 }
 
+// Dust is a speck in the void: a fixed world position, a twinkle phase and a diameter in px.
+type Dust struct {
+	Pos  scmath.Vec3
+	Phi  float64
+	Size float64
+}
+
+// DustParams derives speck i of the seed's dust field from its hash stream.
+func DustParams(seed uint32, i int) Dust {
+	r := sim.Mulberry32(sim.Hash32(seed, chDust, uint32(i)))
+	x := -9 + 18*r()
+	y := -19 + 22*r()
+	z := -0.4 + 2*r()
+	phi := 2 * math.Pi * r()
+	return Dust{Pos: scmath.Vec3{x, y, z}, Phi: phi, Size: 1.5 + r()}
+}
+
+func newDust(seed uint32) []Dust {
+	out := make([]Dust, dustParticleN)
+	for i := range out {
+		out[i] = DustParams(seed, i)
+	}
+	return out
+}
+
+// dustAlpha twinkles a speck between 0 and 0.5.
+func dustAlpha(d Dust, t float64) float64 { return 0.25 + 0.25*math.Sin(1.7*t+d.Phi) }
+
 // particleSize is a particle's diameter at depth, scaled by ref/depth so that specks nearer or farther than the target stay legible.
 func particleSize(size, ref, depth float64) float64 {
 	return size * math.Min(math.Max(ref/depth, 0.4), 2.5)
@@ -86,11 +116,25 @@ func appendLinkParticles(b *triBatch, pr scmath.Projector, parts []linkParticle,
 	}
 }
 
-// drawParticles paints the link particles in one additive batch; it runs after the links and before the cards, so cards hide them.
+// appendDust adds the visible specks to b as white soft sprites.
+func appendDust(b *triBatch, pr scmath.Projector, dust []Dust, t, ref float64) {
+	for _, d := range dust {
+		x, y, depth, ok := pr.Project(d.Pos)
+		if !ok {
+			continue
+		}
+		b.sprite(x, y, particleSize(d.Size, ref, depth)/2, particleTexN, particleTexN, strokeColor(dustColor, dustAlpha(d, t)))
+	}
+}
+
+var dustColor = color.NRGBA{R: 0xFF, G: 0xFF, B: 0xFF, A: 0xFF}
+
+// drawParticles paints the link particles and dust in one additive batch; it runs after the links and before the cards, so cards hide them.
 func (g *Game) drawParticles(pr scmath.Projector, ref float64) {
 	s := g.scene
 	s.partBatch.reset()
 	appendLinkParticles(&s.partBatch, pr, s.parts, s.links, g.t, ref)
+	appendDust(&s.partBatch, pr, s.dust, g.t, ref)
 	s.partBatch.draw(g.canvas, s.partTex)
 }
 

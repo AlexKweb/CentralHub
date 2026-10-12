@@ -16,6 +16,7 @@ import type { LineField } from './grid';
 import { linkField } from './links';
 import { ActivePath } from './ActivePath';
 import { ActiveParticles, DustParticles, LinkParticles } from './Particles';
+import { PostFx } from './PostFx';
 import { drawCard, drawHeader, useCanvasTexture } from './textures';
 
 const CENTERS = cardCenters(cardsDoc.columns);
@@ -59,6 +60,7 @@ export function Scene({ t, cases }: { t: number; cases: readonly Case[] }) {
       ))}
       <ActivePath t={t} cases={cases} />
       <ActiveParticles cases={cases} />
+      <PostFx />
     </>
   );
 }

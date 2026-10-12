@@ -1,6 +1,8 @@
 package ui
 
 import (
+	"math"
+
 	"github.com/hajimehoshi/ebiten/v2"
 
 	"jev/internal/fx"
@@ -15,9 +17,19 @@ const (
 	bloomStep      = 1.0 // tap spacing in quarter-size pixels
 )
 
+// Depth of field: a card more than dofBand units from the focus depth is drawn into a blurred layer; the active card always stays sharp.
+const (
+	dofDiv  = 2
+	dofBand = 3.0
+	dofStep = 1.5 // tap spacing in half-size pixels
+)
+
 // postBuffers are the offscreen frames the effects run through. The logical frame never changes size, so they are allocated once.
 type postBuffers struct {
 	world     *ebiten.Image // backdrop and scene, the input of every effect
+	far       *ebiten.Image // out-of-focus cards, full size
+	farHalf   *ebiten.Image // far at half size, blurred
+	farTmp    *ebiten.Image // blur ping-pong target, half size
 	bright    *ebiten.Image // thresholded bloom source, quarter size
 	brightTmp *ebiten.Image // blur ping-pong target, quarter size
 }
@@ -25,6 +37,9 @@ type postBuffers struct {
 func newPostBuffers() *postBuffers {
 	return &postBuffers{
 		world:     ebiten.NewImage(FrameWidth, FrameHeight),
+		far:       ebiten.NewImage(FrameWidth, FrameHeight),
+		farHalf:   ebiten.NewImage(FrameWidth/dofDiv, FrameHeight/dofDiv),
+		farTmp:    ebiten.NewImage(FrameWidth/dofDiv, FrameHeight/dofDiv),
 		bright:    ebiten.NewImage(FrameWidth/bloomDiv, FrameHeight/bloomDiv),
 		brightTmp: ebiten.NewImage(FrameWidth/bloomDiv, FrameHeight/bloomDiv),
 	}
@@ -36,6 +51,29 @@ func (g *Game) into(dst *ebiten.Image, draw func()) {
 	g.canvas = dst
 	draw()
 	g.canvas = frame
+}
+
+// outOfFocus reports whether a card at depth belongs in the blurred layer; the active card always stays sharp.
+func outOfFocus(depth, focus float64, active bool) bool {
+	return !active && math.Abs(depth-focus) > dofBand
+}
+
+// blurFar shrinks the out-of-focus layer to half size and blurs it; addFar composites the result.
+func (p *postBuffers) blurFar() {
+	var op ebiten.DrawImageOptions
+	op.GeoM.Scale(1.0/dofDiv, 1.0/dofDiv)
+	op.Filter = ebiten.FilterLinear
+	p.farHalf.Clear()
+	p.farHalf.DrawImage(p.far, &op)
+	gaussian(p.farHalf, p.farTmp, dofStep)
+}
+
+// addFar composites the blurred out-of-focus layer over dst, which is the scene zone while clipped.
+func (p *postBuffers) addFar(dst *ebiten.Image) {
+	var op ebiten.DrawImageOptions
+	op.GeoM.Scale(dofDiv, dofDiv)
+	op.Filter = ebiten.FilterLinear
+	dst.DrawImage(p.farHalf, &op)
 }
 
 // bloom adds the glow of the bright parts of world onto world.

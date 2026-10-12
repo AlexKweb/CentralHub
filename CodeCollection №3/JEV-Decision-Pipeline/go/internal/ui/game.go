@@ -130,13 +130,13 @@ func (g *Game) Draw(*ebiten.Image) {
 	if g.fx {
 		g.into(g.post.world, func() {
 			g.canvas.DrawImage(g.backdrop, nil)
-			g.drawScene(accent)
+			g.drawScene(accent, true)
 		})
 		g.post.bloom()
 		g.canvas.DrawImage(g.post.world, nil)
 	} else {
 		g.canvas.DrawImage(g.backdrop, nil)
-		g.drawScene(accent)
+		g.drawScene(accent, false)
 	}
 	g.canvas.DrawImage(g.chrome, nil)
 	g.drawHeader(accent)

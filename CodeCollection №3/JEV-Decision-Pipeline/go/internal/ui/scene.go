@@ -45,6 +45,10 @@ type sceneLayer struct {
 	curvePts  []screenPt
 	ballTex   *ebiten.Image
 	ballBatch triBatch
+	parts     []linkParticle
+	dust      []Dust
+	partTex   *ebiten.Image
+	partBatch triBatch
 }
 
 type cardPlace struct {
@@ -75,7 +79,7 @@ type segment struct {
 func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
 	s := &sceneLayer{
 		rig: rig, sprites: make(map[string]*sprite), centers: make(map[string]scmath.Vec3),
-		grid: gridSegments(), halo: haloTexture(), white: whiteTexture(), ballTex: ballTexture(),
+		grid: gridSegments(), halo: haloTexture(), white: whiteTexture(), ballTex: ballTexture(), partTex: softDisc(particleTexN),
 	}
 	for ci, col := range doc.Columns {
 		clr := hexColor(col.Color)
@@ -92,17 +96,21 @@ func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
 			s.cards = append(s.cards, cardPlace{id: card.ID, card: card, color: clr, center: c})
 		}
 	}
-	for i, l := range sim.Links(seed, doc.Columns) {
+	links := sim.Links(seed, doc.Columns)
+	for i, l := range links {
 		s.links = append(s.links, linkPlace{from: s.centers[l.From], to: s.centers[l.To], clr: linkStroke(l.Color, linkAlpha(seed, i))})
 	}
+	s.parts = newLinkParticles(seed, links)
+	s.dust = newDust(seed)
 	return s
 }
 
-// drawScene paints the 3D layer into the scene zone: grid, links and the active path, then headers and cards back to front, and the ball on top.
+// drawScene paints the 3D layer into the scene zone: grid, links, the active path and their particles, then headers and cards back to front, the active particles and the ball on top.
 func (g *Game) drawScene(accent color.NRGBA) {
 	s := g.scene
 	pose := s.rig.Pose(g.t)
 	pr := scmath.NewProjector(pose.Position, pose.Target, pose.Up)
+	_, _, ref, _ := pr.Project(pose.Target)
 	act := sim.Active(g.t, g.cases)
 	lit := make(map[string]bool, len(act.Lit))
 	for _, id := range act.Lit {
@@ -122,6 +130,7 @@ func (g *Game) drawScene(accent color.NRGBA) {
 	g.clipped(Frame.Scene, func() {
 		drawGrid(g.canvas, pr, s.grid)
 		g.drawLinks(pr, act.Lit, accent)
+		g.drawParticles(pr, ref)
 		type entry struct {
 			depth  float64
 			card   int // index into s.cards, or -1
@@ -151,6 +160,7 @@ func (g *Game) drawScene(accent color.NRGBA) {
 				g.drawHeaderPlace(pr, s.headers[e.header])
 			}
 		}
+		g.drawActiveParticles(pr, act.Lit, accent, ref)
 		g.drawBall(pr, act.Ball, accent)
 	})
 }

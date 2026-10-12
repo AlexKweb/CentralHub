@@ -89,19 +89,22 @@ func lighten(c color.NRGBA) color.NRGBA {
 }
 
 // ballTexture is a premultiplied white disc with a soft radial falloff, shared by the ball's halo and core.
-func ballTexture() *ebiten.Image {
-	pix := make([]byte, ballTexN*ballTexN*4)
-	for j := 0; j < ballTexN; j++ {
-		for i := 0; i < ballTexN; i++ {
-			x := (float64(i)+0.5)/ballTexN*2 - 1
-			y := (float64(j)+0.5)/ballTexN*2 - 1
+func ballTexture() *ebiten.Image { return softDisc(ballTexN) }
+
+// softDisc is a premultiplied white n×n disc with a soft radial falloff, shared by the ball and the particles.
+func softDisc(n int) *ebiten.Image {
+	pix := make([]byte, n*n*4)
+	for j := 0; j < n; j++ {
+		for i := 0; i < n; i++ {
+			x := (float64(i)+0.5)/float64(n)*2 - 1
+			y := (float64(j)+0.5)/float64(n)*2 - 1
 			r := math.Min(1, math.Hypot(x, y))
 			v := uint8((1-r)*(1-r)*255 + 0.5)
-			o := (j*ballTexN + i) * 4
+			o := (j*n + i) * 4
 			pix[o], pix[o+1], pix[o+2], pix[o+3] = v, v, v, v
 		}
 	}
-	img := ebiten.NewImage(ballTexN, ballTexN)
+	img := ebiten.NewImage(n, n)
 	img.WritePixels(pix)
 	return img
 }

@@ -127,13 +127,18 @@ func linkAlpha(seed uint32, i int) float64 {
 	return 0.25 + 0.25*float64(sim.Hash32(seed, chLinkAlpha, uint32(i)))/(1<<32)
 }
 
-// linkStroke is the straight-alpha vertex colour of a link: its palette colour at opacity alpha.
-func linkStroke(name string, alpha float64) [4]float32 {
+// linkColor is the palette colour of a link; unknown names fall back to white.
+func linkColor(name string) color.NRGBA {
 	hex, ok := linkHex[name]
 	if !ok {
 		hex = linkHex["white"]
 	}
-	return strokeColor(hexColor(hex), alpha)
+	return hexColor(hex)
+}
+
+// linkStroke is the straight-alpha vertex colour of a link: its palette colour at opacity alpha.
+func linkStroke(name string, alpha float64) [4]float32 {
+	return strokeColor(linkColor(name), alpha)
 }
 
 // strokeColor is the straight-alpha vertex colour of c at opacity alpha.

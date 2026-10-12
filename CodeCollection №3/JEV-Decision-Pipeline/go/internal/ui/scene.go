@@ -105,7 +105,7 @@ func newSceneLayer(doc sim.CardsDoc, rig camera.Rig, seed uint32) *sceneLayer {
 	return s
 }
 
-// drawScene paints the 3D layer into the scene zone: grid, links and the active path, then headers and cards back to front, and the ball on top.
+// drawScene paints the 3D layer into the scene zone: grid, links, the active path and their particles, then headers and cards back to front, the active particles and the ball on top.
 func (g *Game) drawScene(accent color.NRGBA) {
 	s := g.scene
 	pose := s.rig.Pose(g.t)

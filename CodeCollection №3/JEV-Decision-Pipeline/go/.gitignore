@@ -10,3 +10,8 @@ web/wasm_exec.js
 # test and coverage artifacts
 *.test
 coverage.out
+
+# e2e: installed packages and Playwright outputs
+e2e/node_modules/
+e2e/report/
+e2e/test-results/

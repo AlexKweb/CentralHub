@@ -48,6 +48,9 @@ const (
 	ChDust
 )
 
+// stageEps lets a stage start win over float error, so a jump onto an exact boundary stays on that stage.
+const stageEps = 1e-9
+
 var (
 	stageNames     = [5]string{"state", "ask", "jev", "gate", "code"}
 	stageStarts    = [5]float64{0, 1.2, 2.8, 4.4, 6.0}

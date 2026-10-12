@@ -15,7 +15,7 @@ const vectorsPath = "../../../shared/test-vectors.json"
 
 // sectionCounts pins how many entries each array section holds, so a section that silently shrinks fails.
 var sectionCounts = map[string]int{
-	"timeline": 28, "kpis": 32, "confidence": 33, "buttons": 5, "subtitle": 30, "accent": 10,
+	"timeline": 28, "stageJumps": 120, "kpis": 32, "confidence": 33, "buttons": 5, "subtitle": 30, "accent": 10,
 	"active": 30, "cardPosition": 6, "bars": 24, "barGrow": 48, "actions": 34, "log": 32,
 	"queued": 48, "chief": 10, "split": 28, "spark": 5, "stream": 36, "jumps": 6,
 	"hash32": 8, "mulberry32": 4,
@@ -71,8 +71,9 @@ func TestParityWithSharedVectors(t *testing.T) {
 			}
 			return got, e["out"]
 		},
-		"timeline": func(e entry) (any, any) { return sim.Timeline(num(e["t"])), e["out"] },
-		"kpis":     func(e entry) (any, any) { return sim.KPIs(num(e["t"])), e["out"] },
+		"timeline":   func(e entry) (any, any) { return sim.Timeline(num(e["t"])), e["out"] },
+		"stageJumps": func(e entry) (any, any) { return sim.Timeline(num(e["t"])), e["out"] },
+		"kpis":       func(e entry) (any, any) { return sim.KPIs(num(e["t"])), e["out"] },
 		"confidence": func(e entry) (any, any) {
 			return sim.Confidence(num(e["t"]), cases), e["out"]
 		},

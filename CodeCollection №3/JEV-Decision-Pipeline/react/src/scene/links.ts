@@ -23,7 +23,8 @@ export function linkField(seed: number, links: readonly Link[], centers: Readonl
     const from = centers.get(link.from);
     const to = centers.get(link.to);
     if (!from || !to) throw new Error(`link: unknown card ${!from ? link.from : link.to}`);
-    const alpha = 0.25 + 0.25 * (hash32(seed, ALPHA_CHANNEL, li) / 0x100000000);
+    // Dim links: under bloom, brighter ones merge into solid white bands between the columns.
+    const alpha = 0.1 + 0.18 * ((hash32(seed, ALPHA_CHANNEL, li) % 1000) / 1000);
     const rgb = RGB[link.color].map((c) => c * alpha);
     const pts = sampleBezier(linkCurve(from, to), SEGMENTS);
     for (let s = 0; s < SEGMENTS; s++) {

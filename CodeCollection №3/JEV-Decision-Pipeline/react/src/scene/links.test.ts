@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { hash32 } from '../sim';
 import type { Link, Vec3 } from '../sim';
 import { linkField } from './links';
 
@@ -28,16 +29,26 @@ describe('linkField', () => {
     expect(end[1]).toBeCloseTo(-0.75, 5);
   });
 
-  it('gives each link one alpha in [0.25, 0.5] and keeps the hue', () => {
+  it('gives link i the alpha 0.10 + 0.18·h, h = hash32(seed, 9, i) % 1000 / 1000', () => {
+    const alphaOf = (i: number) => 0.1 + 0.18 * ((hash32(7, 9, i) % 1000) / 1000);
+
     const white = Array.from(field.colors.slice(0, 3));
     expect(white[0]).toBe(white[1]);
-    expect(white[0]).toBeGreaterThanOrEqual(0.25);
-    expect(white[0]).toBeLessThanOrEqual(0.5);
+    expect(white[0]).toBeCloseTo(alphaOf(0), 6);
 
     const pink = Array.from(field.colors.slice(24 * 6, 24 * 6 + 3));
+    expect(pink[0]).toBeCloseTo(alphaOf(1), 6);
     expect(pink[1] / pink[0]).toBeCloseTo(0x5c / 0xff, 6);
-    expect(pink[0]).toBeGreaterThanOrEqual(0.25);
-    expect(pink[0]).toBeLessThanOrEqual(0.5);
+  });
+
+  it('keeps every alpha inside [0.10, 0.28]', () => {
+    const many: Link[] = Array.from({ length: 200 }, () => ({ from: 'a', to: 'b', color: 'white' as const }));
+    const f = linkField(42, many, centers);
+    for (let li = 0; li < many.length; li++) {
+      const a = f.colors[li * 24 * 6];
+      expect(a).toBeGreaterThanOrEqual(0.1);
+      expect(a).toBeLessThanOrEqual(0.28);
+    }
   });
 
   it('is deterministic for a seed', () => {

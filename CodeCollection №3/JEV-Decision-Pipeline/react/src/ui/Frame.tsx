@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Rgb } from '../sim';
+import { useClock } from '../state/store';
 import { FRAME, ZONES, rectStyle } from './geometry';
 
 function frameScale(): number {
@@ -19,6 +20,7 @@ function useFrameScale(): number {
 
 export function Frame({ accent, scene, children }: { accent: Rgb; scene: ReactNode; children: ReactNode }) {
   const scale = useFrameScale();
+  const fx = useClock((s) => s.fx);
   const [r, g, b] = accent;
   const vars = {
     '--accent': `rgb(${r}, ${g}, ${b})`,
@@ -29,6 +31,7 @@ export function Frame({ accent, scene, children }: { accent: Rgb; scene: ReactNo
       <div
         className="frame"
         data-frame
+        data-fx={fx ? '1' : '0'}
         style={{ ...vars, transform: `translate(-50%, -50%) scale(${scale})` }}
       >
         <div className="zone" data-zone="scene" style={rectStyle(ZONES.scene)}>

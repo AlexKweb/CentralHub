@@ -5,6 +5,8 @@ export default defineConfig({
   outputDir: './test-results',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
+  // WebGL under SwiftShader is slow, and parallel workers share the CPU; 30 s is too tight for a scene load.
+  timeout: 90_000,
   reporter: 'list',
   use: {
     baseURL: 'http://localhost:4173',

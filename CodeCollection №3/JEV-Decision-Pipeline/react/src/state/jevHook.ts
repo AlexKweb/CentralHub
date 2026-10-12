@@ -24,6 +24,10 @@ export function markSceneRendered(): void {
   if (window.__jev) window.__jev.ready = true;
 }
 
+export function isSceneRendered(): boolean {
+  return sceneRendered;
+}
+
 /** Set by the post-processing stack once its composer has drawn the current frame. */
 export function markComposedFrame(): void {
   composedFrame = true;

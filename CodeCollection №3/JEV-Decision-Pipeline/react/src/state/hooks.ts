@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
+import { isSceneRendered } from './jevHook';
 import { useClock } from './store';
 
 const UI_HZ = 30;
+/** Largest clock step per frame: a stalled frame slows playback instead of skipping a stage. */
+const MAX_STEP_SECONDS = 0.25;
 
 /** Clock time for rendering, sampled at most UI_HZ times per second so the UI re-renders at a bounded rate. */
 export function useUiTime(): number {
@@ -19,7 +22,8 @@ export function useClockLoop(): void {
     let frame = 0;
     let last = performance.now();
     const loop = (now: number) => {
-      useClock.getState().advance((now - last) / 1000);
+      // The clock waits for the first scene frame, so shader compilation at load does not run playback past a stage.
+      if (isSceneRendered()) useClock.getState().advance(Math.min((now - last) / 1000, MAX_STEP_SECONDS));
       last = now;
       frame = requestAnimationFrame(loop);
     };

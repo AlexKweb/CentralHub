@@ -346,14 +346,8 @@ body {
 }
 .stage-btn[data-state='next'] {
   border-color: rgba(var(--accent-rgb), 0.6);
-  background: rgba(var(--accent-rgb), 0.18);
+  background: rgba(var(--accent-rgb), calc(0.18 + 0.16 * var(--pulse, 0)));
   color: var(--text);
-  animation: next-pulse 1.2s ease-in-out infinite;
-}
-@keyframes next-pulse {
-  50% {
-    background: rgba(var(--accent-rgb), 0.34);
-  }
 }
 
 .panel {

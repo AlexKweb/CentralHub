@@ -87,9 +87,11 @@ function RenderProbe({ t }: { t: number }) {
   useEffect(
     () =>
       addAfterEffect(() => {
-        const { t: now, fx } = useClock.getState();
+        const { t: now, fx, paused } = useClock.getState();
         const composed = takeComposedFrame();
-        if (latest.current === now && (!fx || composed)) markSceneRendered();
+        // A running clock moves on every frame, so only a paused scene can match it exactly.
+        const settled = !paused || latest.current === now;
+        if (settled && (!fx || composed)) markSceneRendered();
       }),
     [],
   );

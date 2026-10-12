@@ -33,7 +33,7 @@ function Stack({ cases }: { cases: readonly Case[] }) {
   return (
     <EffectComposer>
       <DepthOfField ref={dof} target={focus} bokehScale={3} />
-      <Bloom mipmapBlur luminanceThreshold={0.25} luminanceSmoothing={0.2} intensity={1.4} radius={0.7} />
+      <Bloom mipmapBlur luminanceThreshold={0.25} luminanceSmoothing={0.2} intensity={1.8} radius={0.7} />
       <Vignette offset={0.3} darkness={0.6} />
       <Noise opacity={0.04} premultiply />
     </EffectComposer>

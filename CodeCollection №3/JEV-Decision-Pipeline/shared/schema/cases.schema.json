@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "jev/cases.schema.json",
+  "title": "JEV cases",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "gate", "cases"],
+  "properties": {
+    "version": { "const": 1 },
+    "gate": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1 },
+    "cases": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "tile", "accent", "type", "question", "answer", "confidence", "gateLabel", "jevMs", "logCode", "path"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z]+$" },
+          "title": { "type": "string", "pattern": "^[A-Z0-9 ]+$" },
+          "tile": { "type": "string", "minLength": 1, "maxLength": 12 },
+          "accent": { "type": "string", "pattern": "^#[0-9A-F]{6}$" },
+          "type": { "enum": ["choice", "score", "noul"] },
+          "question": { "type": "string", "pattern": "^(Choice|Score|Noul) · [a-z_]+$" },
+          "answer": { "type": "string", "minLength": 1 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "gateLabel": { "type": "string", "minLength": 1 },
+          "jevMs": { "type": "integer", "minimum": 1, "maximum": 9 },
+          "logCode": { "type": "string", "minLength": 1 },
+          "path": {
+            "type": "array",
+            "minItems": 5,
+            "maxItems": 5,
+            "prefixItems": [
+              { "type": "string", "pattern": "^s\\." },
+              { "type": "string", "pattern": "^q\\." },
+              { "type": "string", "pattern": "^j\\." },
+              { "type": "string", "pattern": "^g\\." },
+              { "type": "string", "pattern": "^c\\." }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

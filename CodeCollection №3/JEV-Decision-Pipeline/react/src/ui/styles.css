@@ -1,0 +1,723 @@
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('@shared/fonts/JetBrainsMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('@shared/fonts/JetBrainsMono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('@shared/fonts/JetBrainsMono-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: block;
+}
+
+:root {
+  --bg: #05070b;
+  --panel: rgba(10, 14, 22, 0.88);
+  --border: #1e2636;
+  --text: #e8edf5;
+  --text-2: #7d8aa0;
+  --text-3: #4a5568;
+  --pass: #c6f23a;
+  --review: #ff9f43;
+  --accent: #ff5c5c;
+  --accent-rgb: 255, 92, 92;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+}
+
+body {
+  overflow: hidden;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1240px;
+  height: 1568px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.zone {
+  position: absolute;
+}
+
+/* Full-frame canvas inside the scene zone; the zone rect itself stays as the layout marker. */
+.scene-canvas {
+  position: absolute;
+}
+
+.scene-fade {
+  position: absolute;
+  left: 0;
+  width: 1240px;
+  pointer-events: none;
+}
+.scene-fade--top {
+  top: 0;
+  height: 200px;
+  background: linear-gradient(#05070b, rgba(5, 7, 11, 0));
+}
+.scene-fade--bottom {
+  top: 1150px;
+  height: 418px;
+  background: linear-gradient(rgba(5, 7, 11, 0), #05070b);
+}
+
+.accent-text {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.header {
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.header > span {
+  position: absolute;
+  top: 0;
+  line-height: 32px;
+}
+.header .brand {
+  left: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+}
+.header .system {
+  left: 286px;
+}
+.header .flow {
+  left: 526px;
+}
+.header .author {
+  right: 0;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.kpi::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  top: -1px;
+  height: 2px;
+  border-radius: 6px 6px 0 0;
+  background: var(--accent);
+}
+.kpi-label {
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.kpi-value {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+}
+.kpi-unit {
+  margin-left: 4px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.kpi-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.kpi-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.seg-bar {
+  display: flex;
+  gap: 2px;
+  height: 6px;
+}
+.seg-bar i {
+  flex: 1;
+  background: var(--border);
+}
+.seg-bar i.on {
+  background: var(--accent);
+}
+
+.spark {
+  overflow: hidden;
+}
+.spark polyline {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.thin-bar {
+  position: relative;
+  height: 2px;
+  background: var(--border);
+}
+.thin-bar i {
+  position: absolute;
+  top: -1px;
+  width: 18%;
+  height: 4px;
+  background: var(--accent);
+}
+
+.cost-value {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.6);
+}
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-2);
+}
+.bar-row b {
+  width: 28px;
+  font-weight: 700;
+}
+.track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+}
+.track i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.track i.llm {
+  background: #3a4558;
+}
+
+.conf-value {
+  color: var(--text);
+}
+.conf-value.live {
+  color: var(--pass);
+}
+.badge {
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--bg);
+}
+.badge.pass {
+  background: var(--pass);
+}
+.badge.review {
+  background: var(--review);
+}
+.conf-bar {
+  position: relative;
+  height: 6px;
+  background: var(--border);
+}
+.conf-bar i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--pass);
+}
+.conf-bar b {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: #fff;
+}
+
+.case-badge {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  height: 28px;
+  padding: 0 12px;
+  line-height: 28px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  color: var(--bg);
+  background: var(--accent);
+}
+.case-title {
+  position: absolute;
+  left: 152px;
+  top: 0;
+}
+.case-title h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 36px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.case-sub {
+  margin: 2px 0 0;
+  height: 18px;
+  font-size: 13px;
+  color: #c9d1dd;
+  white-space: nowrap;
+}
+.stages {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  display: flex;
+  gap: 6px;
+}
+.stage-btn {
+  width: 62px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  font: 700 11px 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
+  color: var(--text-3);
+  cursor: pointer;
+}
+.stage-btn[data-state='done'] {
+  border-color: var(--accent);
+  color: var(--text-2);
+}
+.stage-btn[data-state='current'] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+.stage-btn[data-state='next'] {
+  border-color: rgba(var(--accent-rgb), 0.6);
+  background: rgba(var(--accent-rgb), calc(0.18 + 0.16 * var(--pulse, 0)));
+  color: var(--text);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+.panel-title {
+  text-transform: uppercase;
+}
+/* chief.py is a file name, so its title keeps lowercase. */
+.panel[data-zone='panel-chief'] .panel-title {
+  text-transform: none;
+}
+.panel-title::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  vertical-align: middle;
+  background: var(--accent);
+}
+
+.panel-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  font-size: 11px;
+}
+.panel-foot {
+  margin-top: auto;
+  color: var(--accent);
+}
+.dim {
+  color: var(--text-3);
+}
+.track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+}
+.track i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+.segments {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+  height: 10px;
+}
+.segments i {
+  flex: 1;
+  background: #1a2130;
+}
+.segments i.on {
+  background: var(--accent);
+}
+.segments[data-lane='llm'] i.on {
+  background: #5a6475;
+}
+.segments[data-lane='code'] i.on {
+  background: #4fd1e8;
+}
+
+/* parallel questions */
+.pq-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.pq-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 14px;
+}
+.pq-label {
+  width: 62px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.pq-track {
+  position: relative;
+}
+.pq-track b {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+}
+.pq-answer {
+  width: 64px;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--text-3);
+}
+.pq-answer.bright {
+  color: var(--text);
+}
+
+/* confidence stream */
+.stream-chart {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.stream-chart svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.stream-chart polyline {
+  fill: none;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.stream-gate {
+  stroke: #fff;
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+}
+.stream-gate-label {
+  position: absolute;
+  right: 4px;
+  transform: translateY(-100%);
+  color: #fff;
+  font-size: 10px;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+.legend {
+  display: flex;
+  gap: 10px;
+}
+
+/* 12 use cases */
+.tile-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 4px;
+}
+.case-tile {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+}
+.tile-num {
+  font-weight: 700;
+  line-height: 13px;
+}
+.tile-name {
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 13px;
+  color: var(--text-2);
+}
+.case-tile.current {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+.case-tile.current .tile-name {
+  color: var(--bg);
+}
+.tile-mark {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+}
+.case-tile.current .tile-mark {
+  background: var(--bg);
+}
+
+/* chief.py */
+.chief-code {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  white-space: pre;
+  font-size: 11px;
+  line-height: 13px;
+}
+.chief-line {
+  height: 13px;
+  overflow: hidden;
+}
+.chief-line.current {
+  background: rgba(var(--accent-rgb), 0.18);
+}
+.chief-cursor {
+  display: inline-block;
+  width: 6px;
+  height: 11px;
+  margin-left: 1px;
+  vertical-align: -1px;
+  background: var(--accent);
+}
+.tok-kw {
+  color: #ff5c8a;
+}
+.tok-cls {
+  color: #4fd1e8;
+}
+.tok-str {
+  color: #c9d1dd;
+}
+.tok-com {
+  color: #4a5568;
+}
+
+/* run log */
+.log-window {
+  position: relative;
+  height: 75px;
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 15px;
+}
+.log-row {
+  display: flex;
+  height: 15px;
+  white-space: nowrap;
+}
+.log-tag {
+  flex: 0 0 64px;
+  font-weight: 700;
+}
+.log-tag[data-tag='ask'] {
+  color: #c9d1dd;
+}
+.log-tag[data-tag='jev'] {
+  color: #5b9bff;
+}
+.log-tag[data-tag='gate'] {
+  color: #f7b731;
+}
+.log-tag[data-tag='code'] {
+  color: #4fd1e8;
+}
+.log-tag[data-tag='limit'] {
+  color: #7d8aa0;
+}
+.log-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-2);
+}
+
+/* the split */
+.split-lanes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.lane-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lane-label {
+  width: 84px;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.lane-label.strong {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* guardrails */
+.guard-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.guard-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.guard-label {
+  width: 70px;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.guard-track {
+  height: 6px;
+}
+.guard-track i {
+  background: var(--pass);
+}
+.guard-value {
+  min-width: 80px;
+  text-align: right;
+  white-space: nowrap;
+}
+.guard-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  color: #f7b731;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 11px;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+.footer .muted {
+  color: var(--text-3);
+}
+.timeline {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+}
+.timeline i {
+  position: absolute;
+  top: -4px;
+  width: 2px;
+  height: 10px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}

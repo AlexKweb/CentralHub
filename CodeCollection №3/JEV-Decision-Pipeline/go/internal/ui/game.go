@@ -37,6 +37,7 @@ type Game struct {
 	chrome    *ebiten.Image // static panel boxes and titles, painted once
 	logBuf    *ebiten.Image // clips the scrolling run log
 	layer     *ebiten.Image // scratch frame behind clipped regions, see clipped
+	post      *postBuffers  // offscreen frames of the post-effects, see post.go
 	fit       fit           // window mapping from the last DrawFinalScreen
 	ready     bool
 }
@@ -119,15 +120,25 @@ func (g *Game) Draw(*ebiten.Image) {
 	if g.canvas == nil {
 		g.canvas = ebiten.NewImage(FrameWidth, FrameHeight)
 		g.layer = ebiten.NewImage(FrameWidth, FrameHeight)
+		g.post = newPostBuffers()
 		g.scene = newSceneLayer(g.cards, g.rig, g.seed)
 		g.backdrop = newBackdrop()
 		g.chrome = g.buildChrome()
 		g.logBuf = ebiten.NewImage(int(g.panelBody(Frame.RunLog).W), logWindowH)
 	}
-	g.canvas.DrawImage(g.backdrop, nil)
-	g.canvas.DrawImage(g.chrome, nil)
 	accent := accentColor(g.t, g.cases)
-	g.drawScene(accent)
+	if g.fx {
+		g.into(g.post.world, func() {
+			g.canvas.DrawImage(g.backdrop, nil)
+			g.drawScene(accent)
+		})
+		g.post.bloom()
+		g.canvas.DrawImage(g.post.world, nil)
+	} else {
+		g.canvas.DrawImage(g.backdrop, nil)
+		g.drawScene(accent)
+	}
+	g.canvas.DrawImage(g.chrome, nil)
 	g.drawHeader(accent)
 	g.drawKPIs(accent)
 	g.drawCaseHeader(accent)

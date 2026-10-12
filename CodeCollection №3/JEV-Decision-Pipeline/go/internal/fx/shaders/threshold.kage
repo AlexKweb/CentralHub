@@ -1,0 +1,26 @@
+//kage:unit pixels
+
+package main
+
+// Soft-knee luminance cut, then a 4×4 box average: each output texel covers 4×4 source texels.
+
+var Threshold float
+var Knee float
+
+func bright(c vec3) vec3 {
+	l := dot(c, vec3(0.2126, 0.7152, 0.0722))
+	soft := clamp(l-Threshold+Knee, 0.0, 2.0*Knee)
+	soft = soft * soft / (4.0*Knee + 0.0001)
+	return c * max(soft, l-Threshold) / max(l, 0.0001)
+}
+
+func Fragment(dstPos vec4, src0Pos vec2, color vec4) vec4 {
+	base := floor(dstPos.xy) * 4.0
+	var sum vec3
+	for j := 0; j < 4; j++ {
+		for i := 0; i < 4; i++ {
+			sum += bright(imageSrc0At(base + vec2(float(i)+0.5, float(j)+0.5)).rgb)
+		}
+	}
+	return vec4(sum/16.0, 1.0)
+}

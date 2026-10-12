@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"image/color"
 	"math"
 	"testing"
 
@@ -79,5 +80,21 @@ func TestParticleBatchReusesBuffers(t *testing.T) {
 	}
 	if allocs := testing.AllocsPerRun(10, func() { fill(1.5) }); allocs != 0 {
 		t.Fatalf("%v allocations per frame", allocs)
+	}
+}
+
+func TestActivePathParticlesRunAlongTheLitChain(t *testing.T) {
+	centers := map[string]scmath.Vec3{"a": {-3, 0, 0}, "b": {0, 0, 0}, "c": {3, 0, 0}}
+	pr := scmath.NewProjector(scmath.Vec3{0, 0, 30}, scmath.Vec3{}, scmath.Vec3{0, 1, 0})
+	accent := color.NRGBA{R: 0xC6, G: 0xF2, B: 0x3A, A: 0xFF}
+	b := &triBatch{}
+	appendActiveParticles(b, pr, []string{"a", "b", "c"}, centers, accent, 2.25, 30)
+	if want := activeParticleN * 6; len(b.idx) != want {
+		t.Fatalf("%d indices, want %d", len(b.idx), want)
+	}
+	b.reset()
+	appendActiveParticles(b, pr, []string{"a"}, centers, accent, 2.25, 30)
+	if len(b.idx) != 0 {
+		t.Fatalf("a single lit card drew %d indices, want none", len(b.idx))
 	}
 }

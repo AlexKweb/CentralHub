@@ -160,6 +160,7 @@ func (g *Game) drawScene(accent color.NRGBA) {
 				g.drawHeaderPlace(pr, s.headers[e.header])
 			}
 		}
+		g.drawActiveParticles(pr, act.Lit, accent, ref)
 		g.drawBall(pr, act.Ball, accent)
 	})
 }

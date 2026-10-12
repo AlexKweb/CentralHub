@@ -10,15 +10,18 @@ import (
 
 // Particles (SPEC §6.3). Every position is a pure function of the clock and the seed, so the React variant can follow the same rule.
 const (
-	linkParticleN = 1500
-	dustParticleN = 300
-	chParticle    = 9 // sim.Hash32 channel of link particles, as the spec's rule names it; linkAlpha shares it
-	chDust        = 10
-	sparkleChance = 0.15
-	particleTexN  = 16
-	particleWhite = 0.4 // link particles lean this far towards white
-	particleAlpha = 0.7
-	sparkleAlpha  = 1
+	linkParticleN   = 1500
+	dustParticleN   = 300
+	chParticle      = 9 // sim.Hash32 channel of link particles, as the spec's rule names it; linkAlpha shares it
+	chDust          = 10
+	sparkleChance   = 0.15
+	particleTexN    = 16
+	particleWhite   = 0.4 // link particles lean this far towards white
+	particleAlpha   = 0.7
+	sparkleAlpha    = 1
+	activeParticleN = 24
+	activeWhite     = 0.3
+	activeSpeed     = 0.6 // path fractions per second
 )
 
 // Particle is the seeded state of one link particle; its position follows from the clock.
@@ -135,6 +138,33 @@ func (g *Game) drawParticles(pr scmath.Projector, ref float64) {
 	s.partBatch.reset()
 	appendLinkParticles(&s.partBatch, pr, s.parts, s.links, g.t, ref)
 	appendDust(&s.partBatch, pr, s.dust, g.t, ref)
+	s.partBatch.draw(g.canvas, s.partTex)
+}
+
+// appendActiveParticles runs 24 accent particles along the lit path, treating its ribbons as one chain of u in [0,1).
+func appendActiveParticles(b *triBatch, pr scmath.Projector, lit []string, centers map[string]scmath.Vec3, accent color.NRGBA, t, ref float64) {
+	n := len(lit) - 1
+	if n < 1 {
+		return
+	}
+	clr := mixWhite(accent, activeWhite)
+	for k := 0; k < activeParticleN; k++ {
+		x := frac(float64(k)/activeParticleN+activeSpeed*t) * float64(n)
+		seg := min(int(x), n-1)
+		pos := scmath.Cubic(linkCurve(centers[lit[seg]], centers[lit[seg+1]]), x-float64(seg))
+		px, py, depth, ok := pr.Project(pos)
+		if !ok {
+			continue
+		}
+		b.sprite(px, py, particleSize(float64(3+k%3), ref, depth)/2, particleTexN, particleTexN, strokeColor(clr, 1))
+	}
+}
+
+// drawActiveParticles paints the active-path particles above the cards, so they run over the lit cards too.
+func (g *Game) drawActiveParticles(pr scmath.Projector, lit []string, accent color.NRGBA, ref float64) {
+	s := g.scene
+	s.partBatch.reset()
+	appendActiveParticles(&s.partBatch, pr, lit, s.centers, accent, g.t, ref)
 	s.partBatch.draw(g.canvas, s.partTex)
 }
 

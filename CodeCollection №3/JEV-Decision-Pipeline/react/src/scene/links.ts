@@ -7,7 +7,7 @@ const SEGMENTS = 24;
 /** Render-only sub-seed channel (see CHANNEL in sim/constants). */
 const ALPHA_CHANNEL = 9;
 
-const RGB: Record<LinkColor, Vec3> = {
+export const RGB: Record<LinkColor, Vec3> = {
   white: [1, 1, 1],
   pink: [0xff / 255, 0x5c / 255, 0x8a / 255],
   cyan: [0x4f / 255, 0xd1 / 255, 0xe8 / 255],

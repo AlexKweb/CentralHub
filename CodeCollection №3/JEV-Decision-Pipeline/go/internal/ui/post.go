@@ -11,10 +11,10 @@ import (
 // Bloom runs at quarter size: a soft-knee luminance cut, two Gaussian iterations, then an additive upsample.
 const (
 	bloomDiv       = 4
-	bloomThreshold = 0.25
+	bloomThreshold = 0.3
 	bloomKnee      = 0.15
 	bloomGain      = 1.4
-	bloomStep      = 1.0 // tap spacing in quarter-size pixels
+	bloomStep      = 2.0 // tap spacing in quarter-size pixels
 )
 
 // Depth of field: a card more than dofBand units from the focus depth is drawn into a blurred layer; the active card always stays sharp.

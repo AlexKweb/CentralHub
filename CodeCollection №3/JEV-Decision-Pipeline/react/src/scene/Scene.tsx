@@ -6,7 +6,7 @@ import { accent, active, cardPosition, links, timeline } from '../sim';
 import type { Case, Column, Vec3 } from '../sim';
 import { fmtHundredths, hundredths } from '../sim/util';
 import { useClock } from '../state/store';
-import { markSceneRendered } from '../state/jevHook';
+import { markSceneRendered, takeComposedFrame } from '../state/jevHook';
 import { cameraPose, viewOffset } from './camera';
 import { cardView, cardKey } from './cardView';
 import type { CardView } from './cardView';
@@ -16,6 +16,7 @@ import type { LineField } from './grid';
 import { linkField } from './links';
 import { ActivePath } from './ActivePath';
 import { ActiveParticles, DustParticles, LinkParticles } from './Particles';
+import { PostFx } from './PostFx';
 import { drawCard, drawHeader, useCanvasTexture } from './textures';
 
 const CENTERS = cardCenters(cardsDoc.columns);
@@ -59,6 +60,7 @@ export function Scene({ t, cases }: { t: number; cases: readonly Case[] }) {
       ))}
       <ActivePath t={t} cases={cases} />
       <ActiveParticles cases={cases} />
+      <PostFx cases={cases} />
     </>
   );
 }
@@ -76,7 +78,7 @@ function CameraRig({ cases }: { cases: readonly Case[] }) {
   return null;
 }
 
-/** Marks the scene ready once a frame has rendered at the clock time the scene was given. */
+/** Marks the scene ready once a frame has rendered at the clock time the scene was given, through the composer when fx is on. */
 function RenderProbe({ t }: { t: number }) {
   const latest = useRef(t);
   useEffect(() => {
@@ -85,7 +87,9 @@ function RenderProbe({ t }: { t: number }) {
   useEffect(
     () =>
       addAfterEffect(() => {
-        if (latest.current === useClock.getState().t) markSceneRendered();
+        const { t: now, fx } = useClock.getState();
+        const composed = takeComposedFrame();
+        if (latest.current === now && (!fx || composed)) markSceneRendered();
       }),
     [],
   );

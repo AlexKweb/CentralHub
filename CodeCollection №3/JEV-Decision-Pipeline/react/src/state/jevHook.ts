@@ -15,12 +15,25 @@ declare global {
 }
 
 let sceneRendered = false;
+let composedFrame = false;
 
 /** Called by the scene after a frame has drawn at the clock time; `ready` waits for it. */
 export function markSceneRendered(): void {
   if (sceneRendered) return;
   sceneRendered = true;
   if (window.__jev) window.__jev.ready = true;
+}
+
+/** Set by the post-processing stack once its composer has drawn the current frame. */
+export function markComposedFrame(): void {
+  composedFrame = true;
+}
+
+/** Reads and clears the composed-frame flag; the render probe calls it once per frame. */
+export function takeComposedFrame(): boolean {
+  const seen = composedFrame;
+  composedFrame = false;
+  return seen;
 }
 
 /** Test-facing handle; `ready` flips once the 3D scene has rendered at the requested time. */
